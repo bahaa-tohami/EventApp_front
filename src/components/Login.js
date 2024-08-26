@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -36,14 +38,20 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <Popover placement="bottom" showArrow={true}>
+       <PopoverTrigger>
+        <Button>Se connecter</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+    <div className="px-1 py-2">
       <form method="post" onSubmit={handleSubmit} className="login-form">
-        <h2 style={{ paddingLeft: 1 + 'em' }}>Connectez-vous !</h2>
-        <input type="text" placeholder="Email" name="username" onChange={handleChange} value={username} />
-        <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} value={password} />
+        <input className="text-small font-bold" type="text" placeholder="Email" name="username" onChange={handleChange} value={username} />
+        <input className="text-small font-bold" type="password" name="password" placeholder="Mot de passe" onChange={handleChange} value={password} />
         <button>Connexion</button>
       </form>
     </div>
+    </PopoverContent>
+    </Popover>
   );
 };
 
