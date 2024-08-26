@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -26,7 +28,7 @@ const Login = () => {
         if (res.data.token) {
           localStorage.setItem("user", JSON.stringify(res.data));
           console.log("User data saved to localStorage:", res.data);
-        
+
         }
         return res.data;
       })
@@ -36,14 +38,34 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <form method="post" onSubmit={handleSubmit} className="login-form">
-        <h2 style={{ paddingLeft: 1 + 'em' }}>Connectez-vous !</h2>
-        <input type="text" placeholder="Email" name="username" onChange={handleChange} value={username} />
-        <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} value={password} />
-        <button>Connexion</button>
-      </form>
-    </div>
+    <Popover placement="bottom" showArrow={true}>
+      <PopoverTrigger>
+        <Button>Se connecter</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="px-1 py-2">
+          <form method="post" onSubmit={handleSubmit} className="login-form p-3">
+            <input
+              className="text-small p-3 mb-4"
+              type="text"
+              placeholder="Email"
+              name="username"
+              onChange={handleChange}
+              value={username}
+            />
+            <input
+              className="text-small p-3 mb-4"
+              type="password"
+              name="password"
+              placeholder="Mot de passe"
+              onChange={handleChange}
+              value={password}
+            />
+            <button className="p-3">Connexion</button>
+          </form>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
