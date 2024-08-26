@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { NextUIProvider } from "@nextui-org/react";
+import App from "./App";
+import "./index.css";
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <NextUIProvider>
-      <App />
+      <div className="w-screen h-screen p-8 flex items-start justify-center">
+        <App />
+      </div>  
     </NextUIProvider>
   </React.StrictMode>
 );
-

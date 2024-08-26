@@ -1,0 +1,101 @@
+
+body {
+    background-color: rgb(17, 24, 28);
+    color: rgb(161, 161, 170);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signup-container {
+    background-color: rgb(24, 32, 38);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+}
+
+.signup-title {
+    color: rgb(208, 72, 250); /* Couleur violet pour la partie en surbrillance */
+    font-size: 48px; /* Taille de police similaire */
+    font-weight: bold; /* Texte en gras */
+}
+
+
+h2 {
+    color: rgb(161, 161, 170);
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(34, 42, 48);
+    border-radius: 4px;
+    background-color: rgb(17, 24, 28);
+    color: rgb(161, 161, 170);
+    box-sizing: border-box;
+}
+
+
+.signup-button {
+    background-color:rgb(208, 72, 250); /* Couleur de fond principale */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Bordures arrondies */
+    padding: 10px 20px; /* Espacement interne */
+    font-size: 16px; /* Taille de police */
+    cursor: pointer; /* Curseur en forme de main */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transition douce */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Légère ombre */
+}
+
+.signup-button:hover {
+    background-color: #1864c7; /* Couleur de fond en survol */
+    transform: translateY(-2px); /* Légère élévation en survol */
+}
+
+.signup-button:active {
+    background-color: #145a9e; /* Couleur de fond quand actif */
+    transform: translateY(0); /* Réinitialisation de l'élévation */
+}
+
+.signup-button:disabled {
+    background-color: #888; /* Couleur de fond quand désactivé */
+    cursor: not-allowed; /* Curseur désactivé */
+    opacity: 0.6; /* Transparence pour indiquer l'état désactivé */
+}
+
+
+.message {
+    margin-top: 15px;
+}
+
+.message.success {
+    color: rgb(46, 204, 113); /* Vert pour le succès */
+}
+
+.message.error {
+    color: rgb(209, 71, 71); /* Rouge pour l'erreur */
+}
+.error-message {
+    color: rgb(209, 71, 71); /* Rouge pour l'erreur */
+    font-size: 12px;
+    margin-top: 5px;
+}
