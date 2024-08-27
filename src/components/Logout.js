@@ -17,7 +17,7 @@ const Logout = () => {
   };
 
   return (
-    <Button onClick={handleLogout} color="primary" variant="flat">
+    <Button onClick={handleLogout} color="foreground" variant="flat">
       Se déconnecter
     </Button>
   );

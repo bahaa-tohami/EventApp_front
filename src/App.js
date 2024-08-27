@@ -9,9 +9,11 @@ import Navbar from "./components/Navbar.js";
 
 const App = () => {
   return (
+    
+    
     <AuthProvider>
     <Router>
-      <Navbar />
+        <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
@@ -21,6 +23,7 @@ const App = () => {
       </Routes>
     </Router>
    </AuthProvider>
+
   );
 };
 
