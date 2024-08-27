@@ -9,8 +9,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <NextUIProvider>
-    <div className="w-screen h-screen p-8 flex items-start justify-center">
-    
+    <div className="w-screen h-screen p-5">
+      
       <App />
     
     </div>
