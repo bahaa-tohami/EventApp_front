@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons";
+import { Input } from "@nextui-org/react";
+
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -37,6 +40,10 @@ const Signup = () => {
             setMessage('Erreur lors de l\'inscription');
         }
     };
+
+    const [isVisible, setIsVisible] = React.useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
     return (
         <div>
@@ -84,12 +91,23 @@ const Signup = () => {
                 </div>
                 <div>
                     <label>Mot de passe</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
+                    <Input
+                        label="Password"
+                        variant="bordered"
+                        placeholder="Enter your password"
+                        endContent={
+                            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                {isVisible ? (
+                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                ) : (
+                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                )}
+                            </button>
+                        }
+                        type={isVisible ? "text" : "password"}
+                        className="text-small p-3 mb-4"
                         onChange={handleChange}
-                        required
+                       
                     />
                 </div>
                 <button type="submit">S'inscrire</button>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
 import { useAuth } from '../auth/AuthContext';
 
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,12 +32,14 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(res.data));
           setIsAuthenticated(true);
           window.location = "/home";
-          
+
         }
       });
   };
 
+  const [isVisible, setIsVisible] = React.useState(false);
 
+  const toggleVisibility = () => setIsVisible(!isVisible);
   return (
     <Popover placement="bottom" showArrow={true}>
       <PopoverTrigger>
@@ -61,6 +64,7 @@ const Login = () => {
               onChange={handleChange}
               value={password}
             />
+          
             <button className="p-3">Connexion</button>
           </form>
         </div>
