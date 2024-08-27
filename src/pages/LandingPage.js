@@ -4,8 +4,8 @@ const Home = () => {
     
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Bienvenue sur EventApp!</h1>
-      <p>Vous êtes connecté.</p>
+      <h1>Landing page</h1>
+      
     </div>
   );
 };
