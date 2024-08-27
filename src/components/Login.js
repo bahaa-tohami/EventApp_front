@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
 import { useAuth } from '../auth/AuthContext';
 
@@ -29,6 +30,8 @@ const Login = () => {
         if (res.data.token) {
           localStorage.setItem("user", JSON.stringify(res.data));
           setIsAuthenticated(true);
+          window.location = "/home";
+          
         }
       });
   };
