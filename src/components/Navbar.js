@@ -23,7 +23,7 @@ export default function App() {
               </Link> 
             </NavbarItem>
             <NavbarItem>
-              <Link href="#" color="primary">
+              <Link href="/events" color="primary">
                 Mes Événements
               </Link> 
             </NavbarItem>
