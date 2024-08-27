@@ -21,8 +21,8 @@ export default function App() {
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
-              <Link href="/myprofile" color="default">
-              <Link to="/profile" color="foreground">
+              
+              <Link to="/myprofile" color="foreground">
                 Mon Profil
               </Link> 
             </NavbarItem>
