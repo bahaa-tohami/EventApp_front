@@ -53,7 +53,7 @@ export default function App() {
             </NavbarItem>
             <NavbarItem>
               <Button variant="flat">
-                <Link href="/registration" color="foreground" >Sign Up</Link>
+                <Link to="/registration" color="foreground" >Sign Up</Link>
               </Button>
             </NavbarItem>
           </NavbarContent>

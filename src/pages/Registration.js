@@ -4,7 +4,7 @@ import Signup from '../components/Signup'; // Assurez-vous que le chemin est cor
 const Registration = () => {
     return (
         <div className="Registration">
-            <h2>Page d'inscription</h2>
+            
             <Signup />
         </div>
     );
