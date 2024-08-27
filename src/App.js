@@ -6,7 +6,7 @@ import Registration from "./pages/Registration";
 import Events from "./pages/Events";import LandingPage from "./pages/LandingPage";
 import { AuthProvider } from './auth/AuthContext';
 import Navbar from "./components/Navbar.js";
-
+import { Container } from "@nextui-org/react";
 const App = () => {
   return (
     <AuthProvider>
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/events" element={<Events />} />
         {/* Ajoutez d'autres routes ici */}
       </Routes>
     </Router>

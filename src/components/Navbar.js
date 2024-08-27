@@ -1,6 +1,7 @@
 import React from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { useAuth } from '../auth/AuthContext.js';
+import { Link } from "react-router-dom";
 import { AcmeLogo } from "./AcmeLogo.jsx";
 import Login from "./Login.js";
 import Logout from "./Logout.js"; // Import the Logout component
@@ -23,7 +24,7 @@ export default function App() {
               </Link> 
             </NavbarItem>
             <NavbarItem>
-              <Link href="/events" color="primary">
+              <Link to="/events" color="primary">
                 Mes Événements
               </Link> 
             </NavbarItem>
