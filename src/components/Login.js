@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Popover, PopoverTrigger, PopoverContent, Button } from "@nextui-org/react";
-
+import { useAuth } from '../auth/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { setIsAuthenticated } = useAuth();
 
   const handleChange = (e) => {
     if (e.target.name === "username") {
@@ -27,15 +28,11 @@ const Login = () => {
         console.log("Response received:", res);
         if (res.data.token) {
           localStorage.setItem("user", JSON.stringify(res.data));
-          console.log("User data saved to localStorage:", res.data);
-
+          setIsAuthenticated(true);
         }
-        return res.data;
-      })
-      .catch((error) => {
-        console.error("Error during login:", error);
       });
   };
+
 
   return (
     <Popover placement="bottom" showArrow={true}>
