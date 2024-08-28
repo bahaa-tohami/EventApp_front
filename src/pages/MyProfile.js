@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Input, Button } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
 
 const fetchUserProfile = async (userId) => {
     try {
@@ -51,18 +52,51 @@ const UserProfile = () => {
         getUserProfile();
     }, [userId]);
 
+   
+    const [errors, setErrors] = useState({});
+    const [isVisible, setIsVisible] = useState(false); 
+    
+    const toggleVisibility = () => setIsVisible(!isVisible);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
+        // Validation en temps réel
+        let newErrors = { ...errors };
+        if (name === 'email' && !validateEmail(value)) {
+            newErrors.email = 'Veuillez entrer un email valide.';
+        } else {
+            delete newErrors.email;
+        }
+      
+        setErrors(newErrors);
         setModified(true);
     };
 
     const handleValidation = async (e) => {
         e.preventDefault();
-
+        let validationErrors = {};
+        if (!validateEmail(formData.email)) {
+            validationErrors.email = 'Veuillez entrer un email valide.';
+        }
+        setErrors(validationErrors);
+         // Si des erreurs existent, on ne soumet pas le formulaire
+         if (Object.keys(validationErrors).length > 0) {
+            return;
+        }
         const userId = JSON.parse(localStorage.getItem('user')).userId;
 
         const dataToSend = {
@@ -89,70 +123,86 @@ const UserProfile = () => {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div>
-            <h1>Profil utilisateur</h1>
-            {user ? (
-                <div>
-                    <Input
-                        type="text"
-                        name="username"
-                        label="Username"
-                        defaultValue={user.username}
-                        onChange={handleChange}
-                        className="max-w-[220px]"
-                    />
-                    <Input
-                        type="email"
-                        name="email"
-                        label="Email"
-                        defaultValue={user.email}
-                        onChange={handleChange}
-                        className="max-w-[220px]"
-                    />
-                    <Input
-                        type="text"
-                        name="first_name"
-                        label="First Name"
-                        defaultValue={user.first_name}
-                        onChange={handleChange}
-                        className="max-w-[220px]"
-                    />
-                    <Input
-                        type="text"
-                        name="last_name"
-                        label="Last Name"
-                        defaultValue={user.last_name}
-                        onChange={handleChange}
-                        className="max-w-[220px]"
-                    />
-                    <Input
-                        type="text"
-                        name="role"
-                        label="Role"
-                        defaultValue={user.role}
-                        readOnly
-                        className="max-w-[220px]"
-                    />
-                    <Input
-                        type="text"
-                        name="status"
-                        label="Status"
-                        defaultValue={user.status}
-                        readOnly
-                        className="max-w-[220px]"
-                    />
-                    {modified && (
-                        <Button onClick={handleValidation} className="mt-4">
-                            Valider
-                        </Button>
-                    )}
-                    {message && <p>{message}</p>} {/* Afficher le message de retour */}
-                </div>
-            ) : (
-                <p>No user data found.</p>
-            )}
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="w-full max-w-xs flex flex-col gap-6">
+                <Card className="pb-10">
+                    <CardHeader className="flex gap-3">
+                        <div>
+                            <h1 className="text-2xl font-bold">Profil utilisateur</h1>
+                        </div>
+                    </CardHeader>
+                    <CardBody>
+                        {user ? (
+                            <form onSubmit={handleValidation} className="flex flex-col gap-4">
+                                <Input
+                                    type="text"
+                                    name="username"
+                                    label="Nom d'utilisateur"
+                                    defaultValue={user.username}
+                                    onChange={handleChange}
+                                    className="max-w-xs"
+                                />
+                                <Input
+                                    type="email"
+                                    name="email"
+                                    label="Email"
+                                    defaultValue={user.email}
+                                    onChange={handleChange}
+                                    className="max-w-xs"
+                                />
+                                {errors.email && (
+                                                <p className="text-red-500 text-sm">{errors.email}</p>
+                                            )}
+                                <Input
+                                    type="text"
+                                    name="first_name"
+                                    label="Prénom"
+                                    defaultValue={user.first_name}
+                                    onChange={handleChange}
+                                    className="max-w-xs"
+                                />
+                                <Input
+                                    type="text"
+                                    name="last_name"
+                                    label="Nom"
+                                    defaultValue={user.last_name}
+                                    onChange={handleChange}
+                                    className="max-w-xs"
+                                />
+                                <Input
+                                    type="text"
+                                    name="role"
+                                    label="Rôle"
+                                    defaultValue={user.role}
+                                    readOnly
+                                    className="max-w-xs"
+                                />
+                                <Input
+                                    type="text"
+                                    name="status"
+                                    label="Statut"
+                                    defaultValue={user.status}
+                                    readOnly
+                                    className="max-w-xs"
+                                />
+                                {modified && (
+                                    <div className="flex justify-center">
+                                        <Button color="primary" type="submit" className="mt-4">
+                                            Valider
+                                        </Button>
+                                    </div>
+                                )}
+                                {message && <p>{message}</p>} {/* Afficher le message de retour */}
+                            </form>
+                        ) : (
+                            <p className="text-center">Aucune donnée utilisateur trouvée.</p>
+                        )}
+                    </CardBody>
+                </Card>
+            </div>
         </div>
     );
+    
 };
 
 export default UserProfile;
