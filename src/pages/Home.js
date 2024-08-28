@@ -74,9 +74,10 @@ const Home = () => {
                   <br />
                   <p>Organisé par {capitalizeFirstLetter(event.User.username)}</p> {/* Assurez-vous que le champ est correct */}
                   <p>Capacité maximale de {event.capacity} personnes</p>
-                  <NavLink href="">
+                  <br />
+                  <Button onClick={() => window.location.href = "/votre-url"}>
                     En savoir plus
-                  </NavLink>
+                  </Button>
                 </CardBody>
                 <Divider />
                 <CardFooter>
