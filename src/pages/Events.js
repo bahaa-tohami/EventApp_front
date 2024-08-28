@@ -6,16 +6,23 @@ import { useEffect } from 'react';
 import Calandar from '../components/Calandar';
 import useGetMyEvents from '../hooks/getMyEvents';
 import { Button, Container, Card, Text } from '@nextui-org/react';
+import { useNavigate } from 'react-router-dom';
 const Events = () => {
-    const events = useGetMyEvents("http://localhost:9000/event/events");
+    const localStorageData = JSON.parse(localStorage.getItem('user'));
+    const userId = localStorageData.userId;
+    const headers = {
+        Authorization: `Bearer ${localStorageData.token}`
+    };
+    const events = useGetMyEvents(`http://localhost:9000/event/events-by-user/${userId}`);
     const localizer = momentLocalizer(moment);
     const handleSelectEvent = (event) => {
         alert(event.title);
     };
+    const navigate = useNavigate();
     return (
         <div>
         <h1>Calendrier</h1>
-        <Button>Ajouter un événement</Button>
+        <Button onClick={() => navigate('/event-form')}>Ajouter un événement</Button>
        <Calandar events={events} />
     </div>
      

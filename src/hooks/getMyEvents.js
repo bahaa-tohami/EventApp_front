@@ -5,10 +5,10 @@ const useGetMyEvents = (src) => {
     const [events, setEvents] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const token = localStorage.getItem('token');
+    const storageData = JSON.parse(localStorage.getItem('user'));
 
     const headers = {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${storageData.token}`
     };
    
     useEffect(() => {
@@ -19,7 +19,7 @@ const useGetMyEvents = (src) => {
                 setEvents(response.data);
                 console.log(response.data);
             } catch (err) {
-                console.log("err");
+                console.log(err.response.data.message);
             } finally {
                 setLoading(false);
             }
