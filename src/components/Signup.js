@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons";
+import { Input, Button } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -11,18 +14,56 @@ const Signup = () => {
     });
 
     const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState({});
+    const [isVisible, setIsVisible] = useState(false); 
+    
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return passwordRegex.test(password);
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
+            // Validation en temps réel
+            let newErrors = { ...errors };
+            if (name === 'email' && !validateEmail(value)) {
+                newErrors.email = 'Veuillez entrer un email valide.';
+            } else {
+                delete newErrors.email;
+            }
+            if (name === 'password' && !validatePassword(value)) {
+                newErrors.password = 'Le mot de passe doit comporter au moins 8 caractères, inclure une lettre majuscule et un caractère spécial.';
+            } else {
+                delete newErrors.password;
+            }
+            setErrors(newErrors);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let validationErrors = {};
+        if (!validateEmail(formData.email)) {
+            validationErrors.email = 'Veuillez entrer un email valide.';
+        }
+        if (!validatePassword(formData.password)) {
+            validationErrors.password = 'Le mot de passe doit comporter au moins 8 caractères, inclure une lettre majuscule et un caractère spécial.';
+        }
+        setErrors(validationErrors);
 
+        // Si des erreurs existent, on ne soumet pas le formulaire
+        if (Object.keys(validationErrors).length > 0) {
+            return;
+        }
         // Crée un nouvel objet qui mappe 'password' à 'password_hash' pour le backend
         const dataToSend = {
             ...formData,
@@ -38,68 +79,104 @@ const Signup = () => {
         }
     };
 
+    // Il faut définir `sizes` pour éviter les erreurs
+    const sizes = ["md"]; // Ajustez cette liste selon vos besoins
     return (
-        <div>
-            <h2>Inscription</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Nom d'utilisateur</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Prénom</label>
-                    <input
-                        type="text"
-                        name="first_name"
-                        value={formData.first_name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Nom</label>
-                    <input
-                        type="text"
-                        name="last_name"
-                        value={formData.last_name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Mot de passe</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">S'inscrire</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="flex justify-center items-center min-h-screen ">
+            <div className="w-full max-w-xs flex flex-col gap-6 ">
+                {sizes.map((size) => (
+                    <div key={size} className="w-full flex flex-col gap-6">
+                        <Card className="pb-10">
+                            <CardHeader className="flex gap-3">
+                                <div>
+                                    <p className="text-2xl font-bold">Inscription</p>
+                                    <p className="text-small text-default-500">Créez votre compte</p>
+                                </div>
+                            </CardHeader>
+                            <CardBody>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="flex flex-col gap-4 ">
+                                        <Input
+                                            size={size}
+                                            type="text"
+                                            label="Nom d'utilisateur"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                            required
+                                            className="max-w-xs"
+                                        />
+                                        <Input
+                                            size={size}
+                                            type="email"
+                                            label="Email"
+                                            name="email"
+                                            value={formData.email}
+                                            placeholder="junior@gmail.com"
+                                            onChange={handleChange}
+                                            required
+                                            className="max-w-xs"
+                                        
+                                        />
+                                         {errors.email && (
+                                                <p className="text-red-500 text-sm">{errors.email}</p>
+                                            )}
+                                        <Input
+                                            size={size}
+                                            type="text"
+                                            label="Prénom"
+                                            name="first_name"
+                                            value={formData.first_name}
+                                            onChange={handleChange}
+                                            required
+                                            className="max-w-xs"
+                                        />
+                                        <Input
+                                            size={size}
+                                            type="text"
+                                            label="Nom"
+                                            name="last_name"
+                                            value={formData.last_name}
+                                            onChange={handleChange}
+                                            required
+                                            className="max-w-xs"
+                                        />
+                                        <Input
+                                            size={size}
+                                            label="Mot de passe"
+                                            placeholder="Enter your password"
+                                            endContent={
+                                                <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                                    {isVisible ? (
+                                                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                                    ) : (
+                                                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                                    )}
+                                                </button>
+                                            }
+                                            type={isVisible ? "text" : "password"}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="max-w-xs"
+                                            
+                                        />
+                                         {errors.password && (
+                                                <p className="text-red-500 text-sm">{errors.password}</p>
+                                            )}
+                                    </div>
+                                    <div className="flex justify-center " >
+                                    <Button color="primary" type="submit" style={{ marginTop: '20px' }}>S'inscrire</Button>
+                                    </div>
+                                </form>
+                                {message && <p>{message}</p>}
+                            </CardBody>
+                        </Card>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
 
 export default Signup;
-
-
-
