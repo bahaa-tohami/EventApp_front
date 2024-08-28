@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar.js";
 import { Container } from "@nextui-org/react";
 import EventForm from "./components/EventForm";
 import MyProfile from "./pages/MyProfile.js";
+import EventDetails from "./pages/EventDetails.js";
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/events" element={<Events />} />
         <Route path="/event-form" element={<EventForm />} />
         <Route path="/myprofile" element={<MyProfile />} />
+        <Route path="/eventdetails/:eventId" element={<EventDetails />} />
 
         {/* Ajoutez d'autres routes ici */}
       </Routes>
