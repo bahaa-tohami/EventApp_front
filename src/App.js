@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage";
 import { AuthProvider } from './auth/AuthContext';
 import Navbar from "./components/Navbar.js";
 import MyProfile from "./pages/MyProfile.js";
+import EventDetails from "./pages/EventDetails.js";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/registration" element={<Registration />} />
         <Route path="/home" element={<Home />} />
         <Route path="/myprofile" element={<MyProfile />} />
+        <Route path="/eventdetails/:eventId" element={<EventDetails />} />
         {/* Ajoutez d'autres routes ici */}
       </Routes>
     </Router>
