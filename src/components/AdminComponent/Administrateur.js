@@ -1,8 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip} from "@nextui-org/react";
-import {DeleteUser} from "./DeleteUser";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,  Chip, Tooltip} from "@nextui-org/react";
+import {DeleteUser} from "./DeleteUserIcon";
+import {EditUserIcon} from "./EditUserIcon";
+import {EditUserModal} from "./EditUserModal";
+//import {EditUser} from "./EditUserIcon";
 //import {EditIcon} from "./EditIcon";
 //import {DeleteIcon} from "./DeleteIcon";
 //import {EyeIcon} from "./EyeIcon";
@@ -15,7 +18,7 @@ const statusColorMap = {
 };
 
 const columns = [
-  {name: "username", uid: "username"},
+  {name: "USERNAME", uid: "username"},
   {name: "ROLE", uid: "role"},
   {name: "STATUS", uid: "status"},
   {name: "ACTIONS", uid: "actions"},
@@ -26,7 +29,9 @@ export default function Administrateur() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const user = JSON.parse(localStorage.getItem("user")) // là où est stocké le token
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user")); // là où est stocker le token 
  
 
      useEffect(() => {
@@ -70,18 +75,62 @@ export default function Administrateur() {
     }
   };
 
+  const changeUserRole = async (userId, newRole) => {
+    try {
+      await axios.put(`http://localhost:9000/admin/users/role/${userId}`, 
+        { role: newRole },
+        {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        }
+      );
+      fetchUsers();
+    } catch (error) {
+      console.error("Erreur lors du changement de rôle:", error.response ? error.response.data : error.message);
+      setError(`Impossible de changer le rôle: ${error.response ? error.response.data.message : error.message}`);
+    }
+  };
+
+  const activateUser = async (userId) => {
+    try {
+      await axios.put(`http://localhost:9000/admin/users/activate/${userId}`, {}, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      fetchUsers();
+    } catch (error) {
+      console.error("Erreur lors de l'activation de l'utilisateur:", error);
+      setError(`Impossible d'activer l'utilisateur: ${error.response ? error.response.data.message : error.message}`);
+    }
+  };
+
+  const deactivateUser = async (userId) => {
+    try {
+      await axios.put(`http://localhost:9000/admin/users/deactivate/${userId}`, {}, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      fetchUsers();
+    } catch (error) {
+      console.error("Erreur lors de la désactivation de l'utilisateur:", error);
+      setError(`Impossible de désactiver l'utilisateur: ${error.response ? error.response.data.message : error.message}`);
+    }
+  };
+
+
+
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
       case "username":
         return (
-          <User
-            description={`${user.username}`}
-            username={`${user.username}`}
-          >
-            {`${user.username}`}
-          </User>
+          <div className="flex flex-col">
+          <p className="text-bold text-sm">{user.username}</p>
+        </div>
         );
       case "role":
         return (
@@ -110,7 +159,13 @@ export default function Administrateur() {
             
             <Tooltip content="Edit user">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                {/*<EditIcon />*/}
+                <EditUserIcon onClick={() => {
+                  setSelectedUser(user);
+                  setEditModalOpen(true);
+                }}
+                />
+
+                
               </span>
             </Tooltip>
 
@@ -130,21 +185,33 @@ export default function Administrateur() {
   if (error) return <p>Erreur : {error}</p>;
 
   return (
-  <Table aria-label="Example table with custom cells">
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={users}>
-        {(item) => (
-          <TableRow key={item.username}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+    <Table aria-label="Tableau des users">
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={users}>
+          {(item) => (
+            <TableRow key={item.username}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {selectedUser && (
+        <EditUserModal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          user={selectedUser}
+          onChangeRole={changeUserRole}
+          onActivateUser={activateUser}
+          onDeactivateUser={deactivateUser}
+        />
+      )}
+    </>
   );
 }
