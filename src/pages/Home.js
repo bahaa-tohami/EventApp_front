@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { auth } from '../auth/auth';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button } from '@nextui-org/react';
+import { NavLink } from 'react-router-dom';
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -56,6 +57,9 @@ const Home = () => {
                 <p>Heure: {event.time}</p>
                 <p>Organisateur: {event.created_by}</p> {/* Assurez-vous que le champ est correct */}
                 <p>Capacité maximale: {event.capacity}</p>
+                <NavLink href="">
+                En savoir plus
+                </NavLink>
               </CardBody>
               <Divider />
               <CardFooter>
