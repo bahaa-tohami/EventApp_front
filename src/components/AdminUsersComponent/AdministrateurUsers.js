@@ -5,10 +5,7 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,  Chip, 
 import {DeleteUser} from "./DeleteUserIcon";
 import {EditUserIcon} from "./EditUserIcon";
 import {EditUserModal} from "./EditUserModal";
-//import {EditUser} from "./EditUserIcon";
-//import {EditIcon} from "./EditIcon";
-//import {DeleteIcon} from "./DeleteIcon";
-//import {EyeIcon} from "./EyeIcon";
+
 
 
 const statusColorMap = {
@@ -25,7 +22,7 @@ const columns = [
 ];
 
 
-export default function Administrateur() {
+export default function AdministrateurUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

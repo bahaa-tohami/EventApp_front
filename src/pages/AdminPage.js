@@ -1,11 +1,12 @@
 import React from 'react';
-import Administrateur from '../components/AdminComponent/Administrateur';
-
+import AdministrateurUsers from '../components/AdminUsersComponent/AdministrateurUsers';
+import AdministrateurEvents from '../components/AdminEventsComponent/AdministrateurEvents';
 const AdminPage = () => {
     return (
         <div className="AdminPage">
             <h2>Page Administrateur</h2>
-            <Administrateur />
+            {/* <AdministrateurUsers /> */}
+            <AdministrateurEvents />
         </div>
     );
 };
