@@ -8,6 +8,8 @@ import { AuthProvider } from './auth/AuthContext';
 import Navbar from "./components/Navbar.js";
 import { Container } from "@nextui-org/react";
 import EventForm from "./components/EventForm";
+import MyProfile from "./pages/MyProfile.js";
+
 const App = () => {
   return (
     
@@ -22,6 +24,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/event-form" element={<EventForm />} />
+        <Route path="/myprofile" element={<MyProfile />} />
         {/* Ajoutez d'autres routes ici */}
       </Routes>
     </Router>

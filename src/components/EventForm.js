@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select, SelectItem, Button, Textarea } from "@nextui-org/react";
 import axios from 'axios';
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { useNavigate } from 'react-router-dom';
+
 
 
 const EventForm = () => {
@@ -13,8 +16,8 @@ const EventForm = () => {
     const [description, setDescription] = useState('');
     const [errors, setErrors] = useState({});
     const [isValidForm, setIsValidForm] = useState();
-    const options = [{ key: false, label: "Public"}, {key: true, label: "Privé"}]
-
+    const options = [{ key: false, label: "Public" }, { key: true, label: "Privé" }]
+    const navigate = useNavigate();
 
 
     const validateField = (name, value) => {
@@ -85,8 +88,8 @@ const EventForm = () => {
                 setDescription(value);
                 break;
             case "is_private":
-                 setIsPrivate(value)
-                 console.log(is_private)
+                setIsPrivate(value)
+                console.log(is_private)
                 break;
             default:
                 break;
@@ -109,6 +112,7 @@ const EventForm = () => {
         try {
             const response = await axios.post(`http://localhost:9000/event/save-event/${storageData.userId}`, eventData, { headers })
             console.log(response.data)
+            navigate("/events")
         } catch (error) {
             console.log(error)
         }
@@ -124,113 +128,108 @@ const EventForm = () => {
 
         setIsValidForm(valid);
     }, [title, location, date, description]);
-   
+
 
     return (
         <div>
-            <h2>Création d'un événement</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+            <div className='flex justify-center items-center'>
+                <div className='w-full max-w-3xl flex flex-col gap-2'>
+                    <Card>
+                        <CardHeader>
+                            <h1>Création d'un événement</h1>
+                        </CardHeader>
+                        <CardBody>                                                                                  
+                    <form onSubmit={handleSubmit}  className="flex flex-col gap-4">
+                            <Input
+                                type="text"
+                                name="title"
+                                label="Titre"
+                                placeholder="Titre de l'événement"
+                                value={title}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
+                            {errors.title && <p color="error">{errors.title}</p>}
+                    
+                            <Input
+                                type="text"
+                                name="location"
+                                label="Lieu"
+                                placeholder="Lieu de l'événement"
+                                value={location}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
+                            {errors.location && <p color="error">{errors.location}</p>}
+                        
+                            <Input
+                                type="date"
+                                name="date"
+                                label="Date"
+                                placeholder="Date de l'événement"
+                                value={date}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
+                            {errors.date && <p color="error">{errors.date}</p>}
+                       
+                            <Input
+                                type="time"
+                                name="time"
+                                label="Heure"
+                                placeholder="Heure de l'événement"
+                                value={time}
+                                onChange={handleChange}
+                            />
+                      
+                            <Input
+                                type="number"
+                                name="capacity"
+                                min={1}
+                                label="Nombre de place"
+                                placeholder="Nombre de place"
+                                value={capacity}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
+                            {errors.capacity && <p color="error">{errors.capacity}</p>}
+                       
 
-                    <div className="w-full">
-                        <Input
-                            type="text"
-                            name="title"
-                            label="Titre"
-                            placeholder="Titre de l'événement"
-                            value={title}
-                            onChange={handleChange}
-                            onFocus={handleFocus}
-                            onBlur={handleBlur}
-                        />
-                        {errors.title && <p color="error">{errors.title}</p>}
-                    </div>
+                            <Select
+                                name="is_private"
+                                label="Type d'événement"
+                                onChange={(value) => handleChange(value)}
+                                value={is_private}
+                            >
+                                {options.map((op) => (
+                                    <SelectItem key={op.key}>
+                                        {op.label}
+                                    </SelectItem>
+                                ))}
+                            </Select>
+                      
+                            <Textarea
+                                name="description"
+                                label="Description"
+                                placeholder="Description de l'événement"
+                                value={description}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                            />
+                            {errors.description && <p color="error">{errors.description}</p>}
 
-                    <div className="w-full">
-                        <Input
-                            type="text"
-                            name="location"
-                            label="Lieu"
-                            placeholder="Lieu de l'événement"
-                            value={location}
-                            onChange={handleChange}
-                            onFocus={handleFocus}
-                            onBlur={handleBlur}
-                        />
-                        {errors.location && <p color="error">{errors.location}</p>}
-                    </div>
+                        <Button disabled={!isValidForm} type="submit" color="primary">Créer</Button>
 
-                    <div className="w-full">
-                        <Input
-                            type="date"
-                            name="date"
-                            label="Date"
-                            placeholder="Date de l'événement"
-                            value={date}
-                            onChange={handleChange}
-                            onFocus={handleFocus}
-                            onBlur={handleBlur}
-                        />
-                        {errors.date && <p color="error">{errors.date}</p>}
-                    </div>
-
-                    <div className="w-full">
-                        <Input
-                            type="time"
-                            name="time"
-                            label="Heure"
-                            placeholder="Heure de l'événement"
-                            value={time}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="w-full">
-                        <Input
-                            type="number"
-                            name="capacity"
-                            min={1}
-                            label="Nombre de place"
-                            placeholder="Nombre de place"
-                            value={capacity}
-                            onChange={handleChange}
-                            onFocus={handleFocus}
-                            onBlur={handleBlur}
-                        />
-                        {errors.capacity && <p color="error">{errors.capacity}</p>}
-                    </div>
-
-                    <div className="w-full">
-                        <Select
-                            name="is_private"
-                            label="Type d'événement"
-                            onChange={(value) => handleChange(value)}
-                            value={is_private}
-                        >
-                            {options.map((op) => (
-                                <SelectItem key={op.key}>
-                                    {op.label}
-                                </SelectItem>
-                            ))}
-                        </Select>
-                    </div>
-
-                    <div className="w-full">
-                        <Textarea
-                            name="description"
-                            label="Description"
-                            placeholder="Description de l'événement"
-                            value={description}
-                            onChange={handleChange}
-                            onFocus={handleFocus}
-                            onBlur={handleBlur}
-                        />
-                        {errors.description && <p color="error">{errors.description}</p>}
-                    </div>
-
-                    <Button disabled={!isValidForm} type="submit" color="primary">Créer</Button>
+                    </form>
+                    </CardBody>
+                    </Card>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };

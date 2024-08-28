@@ -21,7 +21,8 @@ export default function App() {
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
-              <Link to="/profile" color="foreground">
+              
+              <Link to="/myprofile" color="foreground">
                 Mon Profil
               </Link> 
             </NavbarItem>
@@ -52,7 +53,7 @@ export default function App() {
             </NavbarItem>
             <NavbarItem>
               <Button variant="flat">
-                <Link href="/registration" color="foreground" >Sign Up</Link>
+                <Link to="/registration" color="foreground" >Sign Up</Link>
               </Button>
             </NavbarItem>
           </NavbarContent>
