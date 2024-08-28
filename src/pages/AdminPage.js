@@ -5,7 +5,7 @@ const AdminPage = () => {
     return (
         <div className="AdminPage">
             <h2>Page Administrateur</h2>
-            {/* <AdministrateurUsers /> */}
+            <AdministrateurUsers /> 
             <AdministrateurEvents />
         </div>
     );
