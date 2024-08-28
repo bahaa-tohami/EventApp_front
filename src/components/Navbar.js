@@ -1,14 +1,17 @@
 import React from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { useAuth } from '../auth/AuthContext.js';
 import { AcmeLogo } from "./AcmeLogo.jsx";
 import Login from "./Login.js";
+import { Link } from 'react-router-dom';
+ 
 import Logout from "./Logout.js"; // Import the Logout component
 
 export default function App() {
   const { isAuthenticated } = useAuth();
 
   return (
+
     <Navbar>
       {isAuthenticated ? (
         <>
@@ -18,17 +21,18 @@ export default function App() {
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
-              <Link href="#" color="default">
+              
+              <Link to="/myprofile" color="foreground">
                 Mon Profil
               </Link> 
             </NavbarItem>
             <NavbarItem>
-              <Link href="#" color="primary">
+              <Link to="/events" color="foreground">
                 Mes Événements
               </Link> 
             </NavbarItem>
             <NavbarItem>
-              <Link href="#" color="primary">
+              <Link to="/notifications" color="foreground">
                 Notifications
               </Link> 
             </NavbarItem>
@@ -48,13 +52,14 @@ export default function App() {
               <Login />
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="primary" href="/registration" variant="flat">
-                Sign Up
+              <Button variant="flat">
+                <Link to="/registration" color="foreground" >Sign Up</Link>
               </Button>
             </NavbarItem>
           </NavbarContent>
         </>
       )}
     </Navbar>
+    
   );
 }
