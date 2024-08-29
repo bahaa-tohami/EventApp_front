@@ -1,3 +1,4 @@
+/*      
 const EditEvent = ({event}) => {
         return (
             <>
@@ -44,3 +45,4 @@ const EditEvent = ({event}) => {
 }
 
 export default EditEvent;
+*/

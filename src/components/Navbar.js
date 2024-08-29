@@ -32,6 +32,11 @@ export default function App() {
               </Link> 
             </NavbarItem>
             <NavbarItem>
+              <Link to="/invitations" color="foreground">
+                Mes Invitations
+              </Link> 
+            </NavbarItem>
+            <NavbarItem>
               <Link to="/notifications" color="foreground">
                 Notifications
               </Link> 
