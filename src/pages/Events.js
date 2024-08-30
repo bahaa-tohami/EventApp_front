@@ -8,6 +8,7 @@ import useGetMyEvents from '../hooks/getMyEvents';
 import { Container, Card, Text } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
 import { CardHeader, CardBody } from '@nextui-org/react';
+import TableEvent from '../components/TableEvent';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
 
 import EditEvent from '../components/EditEvent';
@@ -15,18 +16,19 @@ import EditEvent from '../components/EditEvent';
 
 const formatEventsWithMoment = (events) => {
     return events.map(event => ({
-      ...event,
-      date: moment(event.date).toDate() // ou simplement `moment(event.date)` si vous voulez un objet Moment
+        ...event,
+        date: moment(event.date).toDate() // ou simplement `moment(event.date)` si vous voulez un objet Moment
     }));
-  }
+}
 
 const Events = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isTabFormat, setIsTabFormat] = useState(false);
     const onOpen = () => setIsOpen(true);
-  const onOpenChange = (openState) => setIsOpen(openState);
-  const onClose = () => setIsOpen(false);
-  const [backdrop, setBackdrop] = useState('blur');
-   
+    const onOpenChange = (openState) => setIsOpen(openState);
+    const onClose = () => setIsOpen(false);
+    const [backdrop, setBackdrop] = useState('blur');
+
     const localStorageData = JSON.parse(localStorage.getItem('user'));
     const userId = localStorageData.userId;
     const headers = {
@@ -34,30 +36,49 @@ const Events = () => {
     };
     const events = useGetMyEvents(`http://localhost:9000/event/events-by-user/${userId}`);
     const formattedEvents = formatEventsWithMoment(events);
-    
+    const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+    console.log(formattedEvents);
     const localizer = momentLocalizer(moment);
     const navigate = useNavigate();
     return (
         <div>
-        <div className='flex justify-center items-right'>
-             <div className='max-w-1xl flex flex-col gap-2'>
-                <Button onClick={() => navigate('/event-form')}>Ajouter un événement</Button>
-             </div>
-        </div>
-        <div className='flex justify-center items-center'>
-            <div className='w-full max-w-4xl flex flex-col gap-2'>
-                <Card>
-                    <CardHeader>
-                        <h1>Mes événements</h1>
-                    </CardHeader>
-                    <CardBody>
-                        <Calandar events={formattedEvents} />
-                    </CardBody>
-                </Card>
+            <div className='flex justify-center items-center mt-3'>
+                <div className='w-full max-w-4xl flex flex-col gap-2'>
+                    <div className="flex justify-between items-center w-full">
+                        <h1 className="text-lg font-semibold">Mes événements</h1>
+                        <div className="flex gap-2">
+                            <Button
+                                color='default'
+                                size='sm'
+                                onClick={() => setIsTabFormat(!isTabFormat)}
+                                className="text-white px-4 py-2 rounded"
+                            >
+                                {isTabFormat ? 'Voir sous forme liste' : 'Voir sous forme calendrier'}
+                            </Button>
+                            <Button
+                                color='secondary'
+                                size='sm'
+                                onClick={() => navigate('/event-form')}
+                                className="text-white px-4 py-2 rounded"
+                            >
+                                Ajouter un événement
+                            </Button>
+                        </div>
+                    </div>
+                    {isTabFormat ? (    
+                        <Card>
+
+                        <CardBody>
+                            <Calandar events={sortedEvents} />
+                        </CardBody>
+                    </Card>
+                    ) : (
+                        <TableEvent events={events} />
+                    )}
+                </div>
             </div>
-       </div>
-    </div>
-     
+        </div>
+
     );
 };
 
