@@ -47,24 +47,29 @@ const EventDetails = () => {
     const [note, setNote] = useState('');
     const [invitedUser, setInvitedUser] = useState('');
     const [ratingValue, setRatingValue] = useState(0);
-    const [rating, setRating] = useState(null);
+    const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(null);
-    const [totalStars, setTotalStars] = useState(1);
+    const [totalStars, setTotalStars] = useState(0);
+    const [hoverValue, setHoverValue] = useState(undefined);
+    const [message, setMessage] = useState('');
+    const [messageColor, setMessageColor] = useState('');
 
 
     const { isOpen: isInvitesModalOpen, onOpen: onInvitesOpen, onClose: onInvitesClose } = useDisclosure();
     const { isOpen: isCommentModalOpen, onOpen: onCommentOpen, onClose: onCommentClose } = useDisclosure();
-     const { isOpen: isInvitationModalOpen, onOpen:onInvitatioOpen, onOpenChange } = useDisclosure();
-   
+    const { isOpen: isInvitationModalOpen, onOpen: onInvitationOpen, onOpenChange } = useDisclosure();
 
-   
+    const onCommentOpenInitialisation = () => {
+        setComment('');
+        setRating(0);
+        onCommentOpen();
+    }
+
     
 
-    const handleRating = (rate) => {
-        setRatingValue(rate);
-    };
-
     useEffect(() => {
+
+
 
         const loadEvent = async () => {
 
@@ -95,24 +100,49 @@ const EventDetails = () => {
     const handleNoteChange = (e) => setNote(e.target.value);
     const handleInvitedUserChange = (e) => setInvitedUser(e.target.value);
 
-    const handleAddComment = () => {
-        // Logic to handle adding a comment
-        console.log(`Comment added: ${comment}`);
+    const handleAddComment = async () => {
+
+        const data = {
+            content: comment,
+            rating: rating,
+            user_id: currentUser.userId,
+            event_id: eventId
+        }
+        console.log(data);
+
+        onInvitationOpen();
         setComment('');
+
+
+
+        try {
+            const response = await axios.post('http://localhost:9000/comments', data, {
+                headers: {
+                    Authorization: `Bearer ${user.token}` // Utiliser le token pour s'assurer que l'utilisateur est authentifié
+                }
+            });
+
+            console.log(`Comment added: ${response.data}`);
+            setMessage('Commentaire ajouté avec succès!');
+            setMessageColor('green');
+            setComment('');
+            setRating(0);
+            
+
+        } catch (error) {
+            console.error('Error adding comment:', error);
+            setMessage('Erreur lors de l\'ajout du commentaire.');
+            setMessageColor('red');
+        }
+
+        window.location.reload();
     };
 
     const handleAddNote = () => {
-        // Logic to handle adding a note
-        console.log(`Note added: ${note}`);
-        setNote('');
+        console.log(`Note enregistrée: ${rating}`);
+        // Tu peux ajouter d'autres actions ici si nécessaire.
     };
 
-    const handleInviteUser = () => {
-        // Logic to handle inviting a user
-
-        console.log(`User invited: ${invitedUser}`);
-        setInvitedUser('');
-    };
 
     // Fonction pour calculer la moyenne des notes
     const calculateAverageRating = (comments) => {
@@ -186,43 +216,51 @@ const EventDetails = () => {
         );
     };
 
-    //affichage d'une note par commentaire
-
-
-
-
-    // Fonction pour mettre à jour totalStars, s'assurant qu'il ne dépasse pas 5
-    const updateTotalStars = (newTotalStars) => {
-        if (newTotalStars <= 5) {
-            setTotalStars(newTotalStars);
-        } else {
-            console.warn("Le nombre total d'étoiles ne peut pas dépasser 5");
-        }
+    const handleMouseOverStar = value => {
+        setHoverValue(value)
     };
-    // permet de noter un evenement en cliquant sur une étoile
+    const handleMouseLeaveStar = () => {
+        setHoverValue(undefined)
+    }
+    const handleClickStar = value => {
+        setRating(value)
+    };
+
     const renderStars = () => {
-        const stars = [];
+        const colors = {
+            orange: "#F2C265",
+            grey: "a9a9a9"
+        };
+        const stars = Array(5).fill(0);
+       
+        return (
+            <div className="flex">
+                <div className="flex">
+                    {stars.map((_, index) => {
+                        
+                        return (
+                            <FaStar
+                                key={index}
+                                size={24}
+                                value={rating}
+                                onChange={(e) => setRating(e.target.value)}
+                                color={(rating) > index ? colors.orange : colors.grey}
+                                onClick={() => handleClickStar(index + 1)}
+                                onMouseOver={() => handleMouseOverStar(index + 1)}
+                                onMouseLeave={() => handleMouseLeaveStar}
+                            />
 
-        for (let i = 1; i <= totalStars; i++) {
+                        );
 
-            stars.push(
-                <label key={i}>
-                    <input
-                        type="radio"
-                        name="rating"
-                        value={i}
-                        onChange={() => setRating(i)}
-                        style={{ display: 'none' }}
+                    })}
+                </div>
+                <p style={{ marginLeft: '20px' }}>{rating}</p>
+            </div>
 
-                    />
-
-                    &#9733;
-
-                </label>
-            );
-        }
-        return stars;
+        );
     };
+
+
     const eventTime = new Time(event.time.split(':')[0], event.time.split(':')[1]);
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -319,7 +357,7 @@ const EventDetails = () => {
                                     </div>
                                     <div>
 
-                                    <InviteUserForm style={{marginLeft:'10px'}} eventId={event.event_id} />
+                                        <InviteUserForm style={{ marginLeft: '10px' }} eventId={event.event_id} />
 
                                     </div>
                                 </div>
@@ -361,29 +399,21 @@ const EventDetails = () => {
 
 
 
-                        <Button onPress={onCommentOpen}>Ajouter un commentaire</Button>
+                        <Button onClick={onCommentOpenInitialisation}>Ajouter un commentaire</Button>
                         <Modal isOpen={isCommentModalOpen} onOpenChange={onCommentClose}>
                             <ModalContent>
                                 <ModalBody>
                                     <div>Notez l'évènement</div>
                                     <div className="flex" onClick={handleAddNote}>{renderStars()}</div>
-
-                                    <label style={{ fontWeight: 400 }}>
-                                        Number of stars:
-                                        <input
-                                            style={{ marginLeft: '12px', maxWidth: '50px' }}
-                                            onChange={(e) => setTotalStars(Number(e.target.value))}
-                                            value={totalStars}
-                                            type="number"
-                                            min={1}
-                                        />
-                                    </label>
                                     <Textarea
                                         placeholder="Ajouter un commentaire"
                                         value={comment}
                                         onChange={handleCommentChange}
                                         className="max-w-xs"
                                     />
+                                    {message && (
+                                        <p style={{ color: messageColor, marginTop: '10px' }}>{message}</p>
+                                    )}
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button color="primary" onClick={handleAddComment}>
