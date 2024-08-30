@@ -31,7 +31,7 @@ export default function AdministrateurEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:9000/event/events', {
+      const response = await axios.get('http://localhost:9000/admin/events', {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
