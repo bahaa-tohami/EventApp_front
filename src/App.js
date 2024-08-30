@@ -13,6 +13,9 @@ import { Container } from "@nextui-org/react";
 import EventForm from "./components/EventForm";
 import MyProfile from "./pages/MyProfile.js";
 import EventDetails from "./pages/EventDetails.js";
+import InvitationPage from "./pages/InvitationPage.js";
+import NotificationPage from "./pages/NotificationPage.js";
+
 
 
 const App = () => {
@@ -34,7 +37,8 @@ const App = () => {
         <Route path="/event-form" element={<EventForm />} />
         <Route path="/myprofile" element={<MyProfile />} />
         <Route path="/eventdetails/:eventId" element={<EventDetails />} />
-
+        <Route path="/notifications" element={<NotificationPage />} />
+        <Route path="/invitations" element={<InvitationPage />} />
         {/* Ajoutez d'autres routes ici */}
       </Routes>
     </Router>
