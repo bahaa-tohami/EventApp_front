@@ -178,9 +178,9 @@ const Signup = () => {
                             <CardFooter>
                                 <div className="flex justify-between gap-6 w-full " >
                                 
-                                    <Button color="primary" type="submit" style={{ marginTop: '20px' }}>S'inscrire</Button>
+                                    <Button color="primary" type="submit" style={{ marginTop: '20px' }}onClick={handleSubmit}>S'inscrire</Button>
                                 
-                                    <Button color="danger" variant="light" type="submit" style={{ marginTop: '20px' }} onPress={handleCancelation}> Annuler</Button>
+                                    <Button color="danger" variant="light" type="submit" style={{ marginTop: '20px' }} onClick={handleCancelation}> Annuler</Button>
                                 </div>
                             </CardFooter>
                         </Card>
