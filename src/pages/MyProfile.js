@@ -119,7 +119,7 @@ const UserProfile = () => {
         setModified(false);
     };
 
-    if (loading) return <p>Loading...</p>;
+    // if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
     return (
@@ -195,7 +195,7 @@ const UserProfile = () => {
                                 {message && <p>{message}</p>} {/* Afficher le message de retour */}
                             </form>
                         ) : (
-                            <p className="text-center">Aucune donnée utilisateur trouvée.</p>
+                            <p className="text-center"></p>
                         )}
                     </CardBody>
                 </Card>

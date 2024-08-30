@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { auth } from '../auth/auth';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button } from '@nextui-org/react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { TimeInput } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
 
@@ -10,7 +10,7 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 3;
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -75,7 +75,7 @@ const Home = () => {
                   <p>Organisé par {capitalizeFirstLetter(event.User.username)}</p> {/* Assurez-vous que le champ est correct */}
                   <p>Capacité maximale de {event.capacity} personnes</p>
                   <br />
-                  <Button onClick={() => window.location.href = "/votre-url"}>
+                  <Button onClick={() => navigate("/eventdetails/:eventId")}>
                     En savoir plus
                   </Button>
                 </CardBody>
@@ -93,7 +93,7 @@ const Home = () => {
             );
           })
         ) : (
-          <p>Aucun événement disponible.</p>
+          <div></div>
         )}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           {Array.from({ length: Math.ceil(events.length / eventsPerPage) }, (_, index) => (
