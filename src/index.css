@@ -5,3 +5,60 @@
 body {
   background-color: black;
 }
+
+body {
+  overflow-x: hidden; /* Désactiver la barre de défilement horizontale */
+}
+
+.hero-section,
+.features-section,
+.advantages-section,
+.testimonials-section,
+.cta-finale {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.75rem;
+  background-color: black;
+  color: white;
+}
+
+.hero-section h1,
+.features-section h2,
+.advantages-section h2,
+.testimonials-section h2,
+.cta-finale h2 {
+  font-size: 2.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.card {
+  flex: 1 1 calc(25% - 1.25rem);
+  min-width: 15.625rem;
+  background-color: #333;
+  color: white;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  background-color: #444;
+}
+
+.card h1 {
+  font-size: 1.5rem;
+}
