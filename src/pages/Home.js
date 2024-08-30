@@ -75,7 +75,7 @@ const Home = () => {
                   <p>Organisé par {capitalizeFirstLetter(event.User.username)}</p> {/* Assurez-vous que le champ est correct */}
                   <p>Capacité maximale de {event.capacity} personnes</p>
                   <br />
-                  <Button onClick={() => navigate("/eventdetails/:eventId")}>
+                  <Button onClick={() => navigate(`/eventdetails/${event.event_id}`)}>
                     En savoir plus
                   </Button>
                 </CardBody>
