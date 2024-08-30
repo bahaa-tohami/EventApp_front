@@ -127,6 +127,7 @@ const EventDetails = () => {
             setMessageColor('green');
             setComment('');
             setRating(0);
+            window.location.reload();
             
 
         } catch (error) {
@@ -135,7 +136,7 @@ const EventDetails = () => {
             setMessageColor('red');
         }
 
-        window.location.reload();
+        
     };
 
     const handleAddNote = () => {
