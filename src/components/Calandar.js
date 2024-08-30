@@ -3,15 +3,17 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import { useState } from 'react';
 import { Modal, ModalContent } from '@nextui-org/react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const eventStyleGetter = (event) => {
     let backgroundColor = '';
     const userConnected = JSON.parse(localStorage.getItem('user'));
     if(event.created_by === userConnected.userId){
-        backgroundColor = '#48bb78'; // Vert pour le personnel
+        backgroundColor = '#00aa9b'; // Vert pour le personnel
     }else{
-        backgroundColor = '#3182ce'; // Bleu pour autre
+        backgroundColor = ''; // Bleu pour autre
     }
 
   
@@ -28,10 +30,11 @@ const eventStyleGetter = (event) => {
   };
 
 const MyCalandar = ({events}) => {
+    const navigate = useNavigate();
   
     const localizer = momentLocalizer(moment);
     const handleSelectEvent = (event) => {
-        alert(event.title);
+        navigate(`/eventdetails/${event.event_id}`);
     };
     console.log(events);
     return (
