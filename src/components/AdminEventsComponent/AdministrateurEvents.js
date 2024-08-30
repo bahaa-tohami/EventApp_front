@@ -52,7 +52,6 @@ export default function AdministrateurEvents() {
         headers: {
           'Authorization': `Bearer ${user.token}`
         },
-        
       });
       fetchEvents();
     } catch (error) {
@@ -63,7 +62,6 @@ export default function AdministrateurEvents() {
 
   const updateEvent = async (eventId, updatedData) => {
     try {
-      console.log(updatedData);
       const response = await axios.put(
         `http://localhost:9000/admin/events/${eventId}`,
         updatedData,
@@ -77,7 +75,7 @@ export default function AdministrateurEvents() {
   
       if (response.status === 200) {
         console.log("Événement mis à jour avec succès");
-        fetchEvents(); // Rafraîchir la liste des événements
+        fetchEvents();
       } else {
         throw new Error("La mise à jour a échoué");
       }
@@ -94,9 +92,7 @@ export default function AdministrateurEvents() {
       case "title":
         return <p className="text-bold text-sm">{cellValue}</p>;
       case "date":
-        return <p className="text-bold text-sm">{cellValue}</p>;
       case "time":
-        return <p className="text-bold text-sm">{cellValue}</p>;
       case "capacity":
         return <p className="text-bold text-sm">{cellValue}</p>;
       case "is_private":
@@ -107,7 +103,7 @@ export default function AdministrateurEvents() {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
+          <div className="flex justify-center items-center gap-2">
             <Tooltip content="Modifier l'événement">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditEventIcon onClick={() => {

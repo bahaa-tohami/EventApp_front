@@ -1,12 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,  Chip, Tooltip} from "@nextui-org/react";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip} from "@nextui-org/react";
 import {DeleteUser} from "./DeleteUserIcon";
 import {EditUserIcon} from "./EditUserIcon";
 import {EditUserModal} from "./EditUserModal";
-
-
 
 const statusColorMap = {
   active: "success",
@@ -21,7 +19,6 @@ const columns = [
   {name: "ACTIONS", uid: "actions"},
 ];
 
-
 export default function AdministrateurUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +26,6 @@ export default function AdministrateurUsers() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const user = JSON.parse(localStorage.getItem("user")); // là où est stocker le token 
- 
 
      useEffect(() => {
       fetchUsers();
@@ -147,13 +143,7 @@ export default function AdministrateurUsers() {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                {/*<EyeIcon />*/}
-              </span>
-            </Tooltip>
-            
+          <div className="flex justify-center items-center gap-2">
             <Tooltip content="Edit user">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditUserIcon onClick={() => {
