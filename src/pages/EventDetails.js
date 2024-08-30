@@ -55,6 +55,7 @@ const EventDetails = ({ eventId }) => {
                 // Assuming we want to set current user, fetch user data
                 const user = JSON.parse(localStorage.getItem('user'));
                 setCurrentUser(user);
+                console.log('Current user set:', user.userId);
             } catch (error) {
                 console.error(error.message);
             }
@@ -233,14 +234,14 @@ const EventDetails = ({ eventId }) => {
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
-                        {currentUser && currentUser.id === event.ownerId && (
+                        {currentUser && currentUser.userId === event.created_by && (
                             <>
                                 <Input
                                     type="text"
                                     placeholder="Inviter un utilisateur"
                                     value={invitedUser}
                                     onChange={handleInvitedUserChange}
-                                    className="max-w-xs"
+                                    className="max-w-md"
                                 />
                                 <Button color="primary" onClick={handleInviteUser}>
                                     Inviter
