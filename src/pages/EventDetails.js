@@ -3,10 +3,12 @@ import { Card, CardHeader, CardBody, Input, Textarea, Accordion, AccordionItem, 
 import axios from 'axios';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Image } from '@nextui-org/react';
+import { useParams } from 'react-router-dom';
 
 // Mock functions for fetching event and user data
-const fetchEventById = async () => {
+const fetchEventById = async (eventId)=> {
     const user = JSON.parse(localStorage.getItem('user'));
+
 
     // Check if the user's token is present
     if (!user || !user.token) {
@@ -15,7 +17,7 @@ const fetchEventById = async () => {
     }
 
     try {
-        const response = await axios.get(`http://localhost:9000/event/event-by-id/1`, {
+        const response = await axios.get(`http://localhost:9000/event/event-by-id/${eventId}`, {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
@@ -30,7 +32,8 @@ const fetchEventById = async () => {
 };
 
 
-const EventDetails = ({ eventId }) => {
+const EventDetails = () => {
+    const { eventId } = useParams();
     const [event, setEvent] = useState(null);
     const [participantCount, setParticipantCount] = useState(0);
     const [currentUser, setCurrentUser] = useState(null);
