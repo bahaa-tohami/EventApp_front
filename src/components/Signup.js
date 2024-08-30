@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons";
-import { Input, Button } from "@nextui-org/react";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Input, Button} from "@nextui-org/react";
+import { Card, CardBody, CardHeader, CardFooter  } from "@nextui-org/card";
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const Signup = () => {
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({});
     const [isVisible, setIsVisible] = useState(false); 
+    const navigate = useNavigate();
     
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -77,6 +79,10 @@ const Signup = () => {
             console.error('Erreur lors de l\'inscription:', error);
             setMessage('Erreur lors de l\'inscription');
         }
+    };
+    const handleCancelation= (event) => {
+        
+        navigate(`/`);
     };
 
     // Il faut définir `sizes` pour éviter les erreurs
@@ -165,12 +171,18 @@ const Signup = () => {
                                                 <p className="text-red-500 text-sm">{errors.password}</p>
                                             )}
                                     </div>
-                                    <div className="flex justify-center " >
-                                    <Button color="primary" type="submit" style={{ marginTop: '20px' }}>S'inscrire</Button>
-                                    </div>
+                                 
                                 </form>
                                 {message && <p>{message}</p>}
                             </CardBody>
+                            <CardFooter>
+                                <div className="flex justify-between gap-6 w-full " >
+                                
+                                    <Button color="primary" type="submit" style={{ marginTop: '20px' }}>S'inscrire</Button>
+                                
+                                    <Button color="danger" variant="light" type="submit" style={{ marginTop: '20px' }} onPress={handleCancelation}> Annuler</Button>
+                                </div>
+                            </CardFooter>
                         </Card>
                     </div>
                 ))}
