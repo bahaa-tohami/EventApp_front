@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardBody, Input, Textarea, Accordion, AccordionItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from '@nextui-org/react';
 import axios from 'axios';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { Image } from '@nextui-org/react';
 
 // Mock functions for fetching event and user data
 const fetchEventById = async () => {
@@ -28,8 +29,10 @@ const fetchEventById = async () => {
     }
 };
 
+
 const EventDetails = ({ eventId }) => {
     const [event, setEvent] = useState(null);
+    const [participantCount, setParticipantCount] = useState(0);
     const [currentUser, setCurrentUser] = useState(null);
     const [comment, setComment] = useState('');
     const [note, setNote] = useState('');
@@ -39,7 +42,10 @@ const EventDetails = ({ eventId }) => {
     const [hover, setHover] = useState(null);
     const [totalStars, setTotalStars] = useState(1);
 
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const { isOpen: isInvitesModalOpen, onOpen: onInvitesOpen, onClose: onInvitesClose } = useDisclosure();
+    const { isOpen: isCommentModalOpen, onOpen: onCommentOpen, onClose: onCommentClose } = useDisclosure();
+
 
     const handleRating = (rate) => {
         setRatingValue(rate);
@@ -50,8 +56,13 @@ const EventDetails = ({ eventId }) => {
             try {
                 const eventData = await fetchEventById(eventId);
                 setEvent(eventData);
+
+                const totalParticipants = eventData.Participants ? eventData.Participants.length : 0;
+                setParticipantCount(totalParticipants);
+
                 console.log('Event data set:', eventData);
                 console.log('Event data title:', eventData.title);
+
                 // Assuming we want to set current user, fetch user data
                 const user = JSON.parse(localStorage.getItem('user'));
                 setCurrentUser(user);
@@ -62,6 +73,7 @@ const EventDetails = ({ eventId }) => {
         };
 
         loadEvent();
+
     }, []);
 
     const handleCommentChange = (e) => setComment(e.target.value);
@@ -95,8 +107,10 @@ const EventDetails = ({ eventId }) => {
         return parseFloat((total / comments.length).toFixed(1)); // Retourne la moyenne arrondie à 1 décimale
     };
 
+
+
     if (!event) {
-        return <p>Chargement des données...</p>;
+        return;
     }
 
     const averageRating = calculateAverageRating(event.Comments);
@@ -104,50 +118,50 @@ const EventDetails = ({ eventId }) => {
     //RatingDisplay affiche la moyenne des notes d'un evenement en forme d'étoiles
     const RatingDisplay = ({ comments }) => {
         const starAverage = calculateAverageRating(comments);
-        
+
         // Calcul du nombre d'étoiles pleines et partielles
         const fullStars = Math.floor(starAverage);
         const partialStar = starAverage - fullStars;
         const emptyStars = 5 - (fullStars + (partialStar > 0 ? 1 : 0));
-    
+
         // Création du tableau d'étoiles
         const stars = [];
-        
+
         for (let i = 0; i < fullStars; i++) {
             stars.push(<FaStar key={`full-${i}`} color="#ff643d" />);
         }
-    
+
         if (partialStar > 0) {
             stars.push(<FaStarHalfAlt key="partial" color="#ff643d" />);
         }
-    
+
         for (let i = 0; i < emptyStars; i++) {
             stars.push(<FaRegStar key={`empty-${i}`} color="#bbbac0" />);
         }
-    
+
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                {stars}
-                <p style={{ marginLeft: '8px', fontSize: '16px', fontWeight: 'bold' }}>{starAverage}</p>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {stars}
+                    <p style={{ marginLeft: '8px', fontSize: '16px', fontWeight: 'bold' }}>{starAverage}</p>
+                </div>
             </div>
-        </div>
         );
     };
-        // Fonction pour mettre à jour totalStars, s'assurant qu'il ne dépasse pas 5
-        const updateTotalStars = (newTotalStars) => {
-            if (newTotalStars <= 5) {
-                setTotalStars(newTotalStars);
-            } else {
-                console.warn("Le nombre total d'étoiles ne peut pas dépasser 5");
-            }
-        };
-// permet de noter un evenement en cliquant sur une étoile
-        const renderStars = () => {
+    // Fonction pour mettre à jour totalStars, s'assurant qu'il ne dépasse pas 5
+    const updateTotalStars = (newTotalStars) => {
+        if (newTotalStars <= 5) {
+            setTotalStars(newTotalStars);
+        } else {
+            console.warn("Le nombre total d'étoiles ne peut pas dépasser 5");
+        }
+    };
+    // permet de noter un evenement en cliquant sur une étoile
+    const renderStars = () => {
         const stars = [];
 
         for (let i = 1; i <= totalStars; i++) {
- 
+
             stars.push(
                 <label key={i}>
                     <input
@@ -156,16 +170,18 @@ const EventDetails = ({ eventId }) => {
                         value={i}
                         onChange={() => setRating(i)}
                         style={{ display: 'none' }}
-                        
+
                     />
-             
-                        &#9733;
-                    
+
+                    &#9733;
+
                 </label>
             );
         }
         return stars;
     };
+
+
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -178,7 +194,61 @@ const EventDetails = ({ eventId }) => {
                             <p className="text-sm text-default-500">Description: {event.description}</p>
                             <p className="text-sm text-default-500">Date: {event.date}</p>
                             <p className="text-sm text-default-500">Location: {event.location}</p>
+                            {currentUser && currentUser.userId === event.created_by && (
+                                <>
+                                    <div className="flex gap-4 items-center">
+                                        <p className="text-sm text-default-500">Nombre d'inscrits: {participantCount}</p>
+                                        <>
+                                            <Button onPress={onInvitesOpen}>Afficher la liste</Button>
+                                            <Modal isOpen={isInvitesModalOpen} onOpenChange={onInvitesClose}>
+                                                <ModalContent>
+                                                    {(onClose) => (
+                                                        <>
+                                                            <ModalHeader className="flex flex-col gap-1">Liste des invités</ModalHeader>
+                                                            <ModalBody>
+                                                                {event.Participants && event.Participants.length > 0 ? (
+                                                                    <ul>
+                                                                        {event.Participants.map((participant) => (
+                                                                            <li key={participant.user_id} className="border p-2 mb-2 rounded flex items-center gap-3">
+                                                                                <Image
+                                                                                    alt="user avatar"
+                                                                                    height={40}
+                                                                                    radius="sm"
+                                                                                    src="https://avatar.iran.liara.run/public"
+                                                                                    width={40}
+                                                                                />
+                                                                                <div className="flex flex-col">
+                                                                                    <p className="text-md">
+                                                                                      {participant.User.username || 'Utilisateur inconnu'}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                ) : (
+                                                                    <p>Aucun participant disponible.</p>
+                                                                )}
+                                                            </ModalBody>
+
+                                                            <ModalFooter>
+                                                                <Button color="danger" variant="light" onPress={onClose}>
+                                                                    Close
+                                                                </Button>
+
+                                                            </ModalFooter>
+                                                        </>
+                                                    )}
+
+                                                </ModalContent>
+                                            </Modal>
+                                        </>
+
+                                    </div>
+                                </>
+                            )}
                             <div className="text-sm text-default-500">
+
+
                                 <Accordion>
                                     <AccordionItem key="1" aria-label="Commentaires" title="Commentaires" subtitle="Cliquez pour lire les commentaires">
                                         {Array.isArray(event.Comments) && event.Comments.length > 0 ? (
@@ -198,18 +268,18 @@ const EventDetails = ({ eventId }) => {
                             </div>
                             <p><strong>Note moyenne:</strong></p>
                             <div><RatingDisplay comments={event.Comments} /></div>
-                           
+
                         </div>
                     </CardHeader>
                     <CardBody className="flex flex-col gap-4">
-                        <Button onPress={onOpen}>Ajouter un commentaire</Button>
-                        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                        <Button onPress={onCommentOpen}>Ajouter un commentaire</Button>
+                        <Modal isOpen={isCommentModalOpen} onOpenChange={onCommentClose}>
                             <ModalContent>
 
                                 <ModalBody>
                                     <div>Notez l'évènement</div>
                                     <div className="flex" onClick={handleAddNote}>{renderStars()}</div>
-                                    
+
                                     <label style={{ fontWeight: 400 }}>
                                         Number of stars:
                                         <input
@@ -236,16 +306,11 @@ const EventDetails = ({ eventId }) => {
                         </Modal>
                         {currentUser && currentUser.userId === event.created_by && (
                             <>
-                                <Input
-                                    type="text"
-                                    placeholder="Inviter un utilisateur"
-                                    value={invitedUser}
-                                    onChange={handleInvitedUserChange}
-                                    className="max-w-md"
-                                />
+
                                 <Button color="primary" onClick={handleInviteUser}>
-                                    Inviter
+                                    Inviter un utilisateur
                                 </Button>
+
                             </>
                         )}
                     </CardBody>
