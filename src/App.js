@@ -15,6 +15,7 @@ import MyProfile from "./pages/MyProfile.js";
 import EventDetails from "./pages/EventDetails.js";
 import InvitationPage from "./pages/InvitationPage.js";
 import NotificationPage from "./pages/NotificationPage.js";
+import InviteUserForm from "./components/InviteUserForm.js";
 
 
 
@@ -31,7 +32,7 @@ const App = () => {
         <Route path="/registration" element={<Registration />} />
 
         <Route path="/admin" element={<AdminPage />} />
-
+        <Route path="/invite-user/:eventId" element={<InviteUserForm />} />
         <Route path="/home" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/event-form" element={<EventForm />} />
