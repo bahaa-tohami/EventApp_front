@@ -1,28 +1,52 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Button } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Button, Chip } from '@nextui-org/react';
 import moment from 'moment';
 
-const InvitationCard = ({invitation, onButtonClick}) => {
-   const dateFormatted = moment(invitation.created_at).format('DD/MM/YYYY');
-   const timeFormatted = moment(invitation.created_at).format('HH:mm');
+const InvitationCard = ({ invitation, onButtonClick }) => {
+    const userConnected = JSON.parse(localStorage.getItem('user'));
+    const isReceiver = invitation.user_id === userConnected.userId;
+    const isResponded = invitation.status !== 'invited';
     return (
         <div>
-            <Card>
+            <Card className={`${isReceiver ? 'bg-gray' : ''}`}>
                 <CardHeader>
-                    <p>{invitation.Event.title}</p>
+                    <p><b>Evenement: {invitation.Event.title} </b></p>
                 </CardHeader>
                 <CardBody>
                     <div>
-                        <p>{invitation.Event.description}</p>
-                        <p> {invitation.Event.location}</p>
-                        <p> Envoyé le {dateFormatted} à {timeFormatted}</p>
+                        <p>Description: {invitation.Event.description}</p>
+                        <p>Lieu: {invitation.Event.location}</p>
+                        <p> {isReceiver ? 'Date reception: ' : 'Envoyé le: '} 
+                            {new Date(invitation.invited_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            <span> à </span>  {new Date(invitation.invited_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p>Organisateur: {invitation.User.first_name} {invitation.User.last_name}</p>
                     </div>
 
                 </CardBody>
                 <CardFooter>
-                    <Button >Voir l'événement</Button>
-                    <Button onClick={() => onButtonClick(invitation,"accepted")}>Accepter</Button>
-                    <Button onClick={() => onButtonClick(invitation,"declined")}>Refuser</Button>
+                    <div className="flex justify-between items-center w-full">
+                        <Button>Voir l'événement</Button>
+                        {isReceiver ?  (
+                        <div className="flex gap-2 justify-end">
+                            {isResponded ? <Chip color="primary">{invitation.status}</Chip> :
+                                <> 
+                                    <Button
+                                        color="success"
+                                        onClick={() => onButtonClick(invitation, "accepted")}>
+                                        Accepter
+                                    </Button>
+                                    <Button
+                                        color="danger"
+                                        onClick={() => onButtonClick(invitation, "rejected")}>
+                                        Refuser
+                                    </Button>
+                                    </>
+                                }
+                            </div>
+                        ): (
+                            <Chip color="primary">{invitation.status}</Chip> 
+                        )}
+                    </div>
                 </CardFooter>
             </Card>
         </div>
