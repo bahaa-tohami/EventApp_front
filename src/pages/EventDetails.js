@@ -61,6 +61,8 @@ const EventDetails = () => {
     const { isOpen: isInvitesModalOpen, onOpen: onInvitesOpen, onClose: onInvitesClose } = useDisclosure();
     const { isOpen: isCommentModalOpen, onOpen: onCommentOpen, onClose: onCommentClose } = useDisclosure();
     const { isOpen: isInvitationModalOpen, onOpen: onInvitationOpen, onOpenChange } = useDisclosure();
+    const [isParticipant, setIsParticipant] = useState(false);
+    const [isEventPassed, setIsEventPassed] = useState(false);
 
     const onCommentOpenInitialisation = () => {
         setComment('');
@@ -72,11 +74,7 @@ const EventDetails = () => {
     
 
     useEffect(() => {
-
-
-
         const loadEvent = async () => {
-
             try {
                 const eventData = await fetchEventById(eventId);
                 setEvent(eventData);
@@ -84,21 +82,27 @@ const EventDetails = () => {
                 const totalParticipants = eventData.Participants ? eventData.Participants.length : 0;
                 setParticipantCount(totalParticipants);
 
-                console.log('Event data set:', eventData);
-                console.log('Event data title:', eventData.title);
-
-                // Assuming we want to set current user, fetch user data
+                // Vérifier si l'utilisateur actuel est un participant
                 const user = JSON.parse(localStorage.getItem('user'));
                 setCurrentUser(user);
+                const isUserParticipant = eventData.Participants.some(p => p.user_id === user.userId);
+                setIsParticipant(isUserParticipant);
+
+                // Vérifier si l'événement est passé
+                const eventDate = new Date(eventData.date + 'T' + eventData.time);
+                setIsEventPassed(eventDate < new Date());
+
+                console.log('Event data set:', eventData);
                 console.log('Current user set:', user.userId);
+                console.log('Is participant:', isUserParticipant);
+                console.log('Is event passed:', eventDate < new Date());
             } catch (error) {
                 console.error(error.message);
             }
         };
 
         loadEvent();
-
-    }, []);
+    }, [eventId]);
 
     const handleCommentChange = (e) => setComment(e.target.value);
     const handleNoteChange = (e) => setNote(e.target.value);
@@ -281,6 +285,8 @@ const EventDetails = () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
+    console.log('Render - isParticipant:', isParticipant, 'isEventPassed:', isEventPassed);
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'black' }}>
             <div style={{ width: '100%', maxWidth: '800px', margin: '1rem' }}>
@@ -413,8 +419,8 @@ const EventDetails = () => {
                         </div>
 
 
-
-                        <Button onClick={onCommentOpenInitialisation}>Ajouter un commentaire</Button>
+                        {isParticipant && isEventPassed && (
+                        <Button onClick={onCommentOpenInitialisation}>Ajouter un commentaire</Button>  )}
                         <Modal isOpen={isCommentModalOpen} onOpenChange={onCommentClose}>
                             <ModalContent>
                                 <ModalBody>
