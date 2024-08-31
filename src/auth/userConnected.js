@@ -1,6 +1,11 @@
-const userConnected = () => {
-    const storageData = JSON.parse(localStorage.getItem("user"))
-    return storageData.userId;
-}
+export const UserConnected = () => {
 
-export default userConnected
+    const user = JSON.parse(localStorage.getItem("user"))
+
+    if (user && user.token) {
+        return user.userId;
+    } else {
+        return {}
+    }
+
+}

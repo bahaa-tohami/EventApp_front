@@ -4,14 +4,13 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useEffect, useState } from 'react';
 import Calandar from '../components/Calandar';
-import useGetMyEvents from '../hooks/getMyEvents';
 import { Container, Card, Text } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
 import { CardHeader, CardBody } from '@nextui-org/react';
 import TableEvent from '../components/TableEvent';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
+import useGetData from '../hooks/getData';
 
-import EditEvent from '../components/EditEvent';
 
 
 const formatEventsWithMoment = (events) => {
@@ -24,6 +23,7 @@ const formatEventsWithMoment = (events) => {
 const Events = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isTabFormat, setIsTabFormat] = useState(false);
+    const [refresh, setRefresh] = useState(0);
     const onOpen = () => setIsOpen(true);
     const onOpenChange = (openState) => setIsOpen(openState);
     const onClose = () => setIsOpen(false);
@@ -34,9 +34,10 @@ const Events = () => {
     const headers = {
         Authorization: `Bearer ${localStorageData.token}`
     };
-    const events = useGetMyEvents(`http://localhost:9000/event/events-by-user/${userId}`);
-    const formattedEvents = formatEventsWithMoment(events);
-    const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+   
+    const {data, error, loading} = useGetData(`http://localhost:9000/event/events-by-user/${userId}`, refresh);
+    const formattedEvents = formatEventsWithMoment(data);
+    const sortedEvents = data.sort((a, b) => new Date(a.date) - new Date(b.date));
     console.log(formattedEvents);
     const localizer = momentLocalizer(moment);
     const navigate = useNavigate();
@@ -73,7 +74,7 @@ const Events = () => {
                         </CardBody>
                     </Card>
                     ) : (
-                        <TableEvent events={events} />
+                        <TableEvent events={data} />
                     )}
                 </div>
             </div>
