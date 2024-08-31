@@ -4,14 +4,16 @@ import { useAuth } from '../auth/AuthContext.js';
 import { AcmeLogo } from "./AcmeLogo.jsx";
 import Login from "./Login.js";
 import { Link } from 'react-router-dom';
- 
+import { NotificationIcon } from "./NotificationIcon.jsx";
 import Logout from "./Logout.js"; // Import the Logout component
 import axios from "axios";
+import { Badge } from "@nextui-org/react";
 
-export default function App() {
+
+export default function App({handleOnClickOnNotification,countNotifications}) {
   const { isAuthenticated } = useAuth();
   const [role, setRole] = useState(null);
-
+  const isInvisible = countNotifications == 0;
   useEffect(() => {
     const fetchUserRole = async () => {
       const user = JSON.parse(localStorage.getItem('user'));
@@ -42,30 +44,32 @@ export default function App() {
             <p className="font-bold text-inherit">ACME</p>
           </NavbarBrand>
           <NavbarContent justify="end">
-          <NavbarItem>
+            <NavbarItem>
               <Link to="/home" color="foreground">
                 Accueil
-              </Link> 
+              </Link>
             </NavbarItem>
             <NavbarItem>
               <Link to="/myprofile" color="foreground">
                 Mon Profil
-              </Link> 
+              </Link>
             </NavbarItem>
             <NavbarItem>
               <Link to="/events" color="foreground">
                 Mes Événements
-              </Link> 
+              </Link>
             </NavbarItem>
             <NavbarItem>
               <Link to="/invitations" color="foreground">
                 Mes Invitations
-              </Link> 
+              </Link>
             </NavbarItem>
             <NavbarItem>
               <Link to="/notifications" color="foreground">
-                Notifications
-              </Link> 
+                <Badge placement="top-right" onClick={handleOnClickOnNotification} color="danger" isInvisible={isInvisible} content={countNotifications}  shape="circle">
+                 Notifications
+                </Badge>
+              </Link>
             </NavbarItem>
             {role === 'admin' && ( // Vérifiez si le rôle est 'admin'
               <NavbarItem>
@@ -73,7 +77,7 @@ export default function App() {
               </NavbarItem>
             )}
             <NavbarItem>
-              <Logout /> 
+              <Logout />
             </NavbarItem>
           </NavbarContent>
         </>
@@ -96,6 +100,6 @@ export default function App() {
         </>
       )}
     </Navbar>
-    
+
   );
 }

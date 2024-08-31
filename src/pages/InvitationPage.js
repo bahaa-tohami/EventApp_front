@@ -1,18 +1,12 @@
 import React from 'react';
-import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useEffect, useState } from 'react';
-import Calandar from '../components/Calandar';
-import useGetMyEvents from '../hooks/getMyEvents';
-import { Container, Card, Text } from '@nextui-org/react';
-import { useNavigate } from 'react-router-dom';
-import { CardHeader, CardBody } from '@nextui-org/react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
-import useMyNotifications from '../hooks/getMyNotification';
-import useMyInvitations from '../hooks/getMyInvitations';
+import {useState } from 'react';
 import InvitationCard from '../components/InvitationCard';
 import usePutData from '../hooks/putData';
+import useMyNotifications from '../hooks/getData';
+import { useNavigate } from 'react-router-dom';
+import useGetData from '../hooks/getData';
+
 
 
 
@@ -21,11 +15,12 @@ import usePutData from '../hooks/putData';
 const Events = () => {
     const [invitation, setInvitation] = useState(null);
     const url = "http://localhost:9000/guest/invite-response";
+    const navigate = useNavigate();
 
     const localStorageData = JSON.parse(localStorage.getItem('user'));
     const userId = localStorageData.userId;
-    const [urlInvitation, setUrlInvitation] = useState(`http://localhost:9000/guest/invitations/${userId}`);
-    const {invitations, error, loading} = useMyInvitations(urlInvitation);
+    const [refresh, setRefresh] = useState(0);
+    const {data, error, loading} = useGetData(`http://localhost:9000/guest/invitations/${userId}`, refresh);
 
     const {putData, error1, loading1} = usePutData("http://localhost:9000/guest/invite-response");
     const handleButtonClick = (invitation, status) => {
@@ -39,6 +34,7 @@ const Events = () => {
         putData(invitationResponse);
         if(!error){
             console.log("Invitation accepted");
+            setRefresh(refresh + 1);
            // setUrlInvitation(`http://localhost:9000/guest/invitations/${userId}`);
         }   
 
@@ -52,8 +48,8 @@ const Events = () => {
         <div>
         <div className='flex justify-center items-center'>
             <div className='w-full max-w-xl flex flex-col gap-2'>
-                <h1>List des invitations</h1>
-                {invitations.map((invitation, index) => (
+                <h1>Liste des invitations</h1>
+                {data.map((invitation, index) => (
                     <InvitationCard key={index} invitation={invitation} onButtonClick={handleButtonClick} />
                 ))}
             </div>
