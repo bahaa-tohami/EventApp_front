@@ -18,11 +18,11 @@ const Events = () => {
     const [refresh2, setRefresh2] = useState(0);
 
     const { data, error, loading } = useGetData(`http://localhost:9000/notifications/${userId}`, refresh2);
-    const { putData, error1, loading1 } = usePutData(`http://localhost:9000/notifications/${notificationId}`);
-    useEffect(() => {
+    const { putData, errorPut, loadingPut, dataReturnPut } = usePutData(`http://localhost:9000/notifications/${notificationId}`);
+    useEffect( () => {
         if (notificationId !== 0) { // Avoid calling putData on initial render
-            putData({ is_read: true });
-            if (!error1) {
+            const response =  putData({ is_read: true });
+            if (response) {
                 console.log("Notification modifiée");
                 setRefresh(refresh + 1);
                 setRefresh2(refresh2 + 1);
