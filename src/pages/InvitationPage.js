@@ -19,8 +19,8 @@ const Events = () => {
     const [refresh, setRefresh] = useState(0);
     const { data, error, loading } = useGetData(`http://localhost:9000/guest/invitations/${userId}`, refresh);
 
-    const { putData, error1, loading1 } = usePutData("http://localhost:9000/guest/invite-response");
-    const handleButtonClick = (invitation, status) => {
+    const { putData, errorPut, loadingPut, dataReturnPut } = usePutData("http://localhost:9000/guest/invite-response");
+    const handleButtonClick = async (invitation, status) => {
         const invitationResponse = {
             user_id: invitation.user_id,
             event_id: invitation.event_id,
@@ -28,8 +28,8 @@ const Events = () => {
             status: status
         }
         console.log(invitationResponse);
-        putData(invitationResponse);
-        if (!error) {
+        const response = await putData(invitationResponse);
+        if (!errorPut) {
             console.log("Invitation accepted");
             setRefresh(refresh + 1);
         }
