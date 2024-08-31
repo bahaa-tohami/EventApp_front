@@ -10,6 +10,8 @@ import { CardHeader, CardBody } from '@nextui-org/react';
 import TableEvent from '../components/TableEvent';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
 import useGetData from '../hooks/getData';
+import EventForm from '../components/EventForm';
+
 
 
 
@@ -28,14 +30,15 @@ const Events = () => {
     const onOpenChange = (openState) => setIsOpen(openState);
     const onClose = () => setIsOpen(false);
     const [backdrop, setBackdrop] = useState('blur');
+    const [eventSelected, setEventSelected] = useState(null);
 
     const localStorageData = JSON.parse(localStorage.getItem('user'));
     const userId = localStorageData.userId;
     const headers = {
         Authorization: `Bearer ${localStorageData.token}`
     };
-   
-    const {data, error, loading} = useGetData(`http://localhost:9000/event/events-by-user/${userId}`, refresh);
+
+    const { data, error, loading } = useGetData(`http://localhost:9000/event/events-by-user/${userId}`, refresh);
     const formattedEvents = formatEventsWithMoment(data);
     const sortedEvents = data.sort((a, b) => new Date(a.date) - new Date(b.date));
     console.log(formattedEvents);
@@ -66,13 +69,13 @@ const Events = () => {
                             </Button>
                         </div>
                     </div>
-                    {isTabFormat ? (    
+                    {isTabFormat ? (
                         <Card>
 
-                        <CardBody>
-                            <Calandar events={sortedEvents} />
-                        </CardBody>
-                    </Card>
+                            <CardBody>
+                                <Calandar events={sortedEvents} />
+                            </CardBody>
+                        </Card>
                     ) : (
                         <TableEvent events={data} />
                     )}

@@ -20,6 +20,7 @@ import { io } from 'socket.io-client';
 import { useState } from 'react';
 import { UserConnected } from './auth/userConnected.js';
 import { useEffect } from 'react';
+import EdiformPage from "./pages/EdiformPage.js";
 
 const socket = io('http://localhost:9000');
 
@@ -56,9 +57,9 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
-
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/invite-user/:eventId" element={<InviteUserForm />} />
+          <Route path="/edit-event/:eventId" element={<EdiformPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/events" element={<Events />} />
           <Route path="/event-form" element={<EventForm />} />
