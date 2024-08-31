@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Button } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Button, Image } from '@nextui-org/react';
 import moment from 'moment';
 import { Chip } from '@nextui-org/react';
 import { useNavigate } from 'react-router-dom';
@@ -14,15 +14,25 @@ const NotificationCard = ({ notification, handleOnClicButtonRead }) => {
     }
     return (
         <div>
-            <Card className={`${notification.is_read ? 'bg-gray' : ''}`}>
-                <CardHeader>
-                    <p>{notification.type}</p>
+            <Card className='mb-5'>
+                <CardHeader className="flex gap-3">
+                <Image
+                    alt="event image"
+                    height={40}
+                    radius="sm"
+                    src="https://via.placeholder.com/40" // Remplacez par l'URL de l'image de l'événement si disponible
+                    width={40}
+                  />
+                  <div className="flex flex-col">
+                <h1 className="text-xl">{notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}</h1>
+                <p className="text-small text-default-500">{new Date(notification.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        <span> à </span> {timeFormatted}</p>
+                        </div>
                 </CardHeader>
                 <CardBody>
                     <div>
                         <p>{notification.message}</p>
-                        <p>{new Date(notification.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        <span> à </span> {timeFormatted}</p>
+                        
                     </div>
 
                 </CardBody>

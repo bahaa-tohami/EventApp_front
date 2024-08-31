@@ -46,6 +46,7 @@ const Events = () => {
     const navigate = useNavigate();
     return (
         <div>
+            <br />
             <div className='flex justify-center items-center mt-3'>
                 <div className='w-full max-w-4xl flex flex-col gap-2'>
                     <div className="flex justify-between items-center w-full">

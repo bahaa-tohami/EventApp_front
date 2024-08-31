@@ -1,9 +1,19 @@
 import React from 'react';
- 
+
 const Footer = () => {
   return (
-    <footer style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '20px 0', borderTop: '1px solid #eaeaea', backgroundColor: '#1a1a1a', color: 'white' }}>
-      <div style={{ width: '100%', maxWidth: '800px', textAlign: 'center' }}>
+    <footer style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      flexDirection: 'column', 
+      padding: '20px 0', 
+      borderTop: '1px solid #eaeaea', 
+      backgroundColor: '#1a1a1a', 
+      color: 'white', 
+      width: '100%' 
+    }}>
+      <div style={{ textAlign: 'center' }}>
         <p style={{ margin: '0.5rem 0', fontSize: '1.2rem', fontWeight: 'bold' }}>© 2024 ACME Corporation</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '1rem' }}>
           <a href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#ff6347'} onMouseOut={(e) => e.target.style.color = 'white'}>À propos</a>
@@ -19,5 +29,5 @@ const Footer = () => {
     </footer>
   );
 };
- 
+
 export default Footer;
