@@ -3,24 +3,25 @@ import axios from 'axios';
 import {auth} from '../auth/auth';
 
 const usePutData = (url) => {
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState(null);
+    const [errorPut, setErrorPut] = useState(null);
+    const [loadingPut, setLoadingPut] = useState(false);
+    const [dataReturnPut, setDataReturnPut] = useState(null);
     const headers = auth();
     const putData = async (newData) => {
-        setLoading(true);
-        setError(null);
+        setLoadingPut(true);
+        setErrorPut(null);
         try {
             const response = await axios.put(url, newData, { headers });
-            setData(response.data);
+            setDataReturnPut(response.data);
+            return response.data;
         } catch (err) {
            console.log(err);
-           setError(err.response.data.message);
+           setErrorPut(err.response.data.message);
         } finally {
-            setLoading(false);
+                setLoadingPut(false);
         }
     };
-    return { putData, error, loading };
+    return { putData, errorPut, loadingPut };
 };
 
 export default usePutData;
