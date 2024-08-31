@@ -70,7 +70,7 @@ const App = () => {
           <Route path="/invitations" element={<InvitationPage />} />
           {/* Ajoutez d'autres routes ici */}
         </Routes>
-        <Footer />
+        
       </Router>
     </AuthProvider>
 
