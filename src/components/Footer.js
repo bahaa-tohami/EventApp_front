@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from '@nextui-org/react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
+import axios from 'axios';
 
-const Footer = () => {
+
+const Footer = ({ handleOnClickOnNotification, countNotifications }) => {
+  const { isAuthenticated } = useAuth();
+  const [role, setRole] = useState(null);
+  const isInvisible = countNotifications === 0 || countNotifications === undefined;
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.userId && user.token) {
+        try {
+          const response = await axios.get(`http://localhost:9000/users/${user.userId}/role`, {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          });
+          setRole(response.data.role);
+        } catch (error) {
+          console.error("Échec de la récupération du rôle de l'utilisateur", error);
+        }
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
   return (
     <footer style={{ 
       backgroundColor: 'black', 
@@ -17,17 +45,31 @@ const Footer = () => {
         alignItems: 'center'
       }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ margin: 0 }}>Event App</h3>
+          <p style={{ fontWeight: 'bold', marginLeft: '0.5rem' }}>ACME</p>
         </div>
         <nav style={{
           display: 'flex',
           gap: '1rem'
         }}>
-          <Link href="/" color="foreground">Accueil</Link>
-          <Link href="/events" color="foreground">Mes Événements</Link>
-          <Link href="/myprofile" color="foreground">Mon Profil</Link>
-          <Link href="/notifications" color="foreground">Notifications</Link>
-          <Link href="/invitations" color="foreground">Invitations</Link>
+          {isAuthenticated ? (
+            <>
+              <Link as={RouterLink} to="/home" color="foreground">Accueil</Link>
+              <Link as={RouterLink} to="/myprofile" color="foreground">Mon Profil</Link>
+              <Link as={RouterLink} to="/events" color="foreground">Mes Événements</Link>
+              <Link as={RouterLink} to="/invitations" color="foreground">Invitations</Link>
+              <Link as={RouterLink} to="/notifications" color="foreground" onClick={handleOnClickOnNotification}>
+                Notifications {!isInvisible && `(${countNotifications})`}
+              </Link>
+              {role === 'admin' && (
+                <Link as={RouterLink} to="/admin" color="foreground">Admin</Link>
+              )}
+            </>
+          ) : (
+            <>
+              <Link as={RouterLink} to="/login" color="foreground">Login</Link>
+              <Link as={RouterLink} to="/registration" color="foreground">Sign Up</Link>
+            </>
+          )}
         </nav>
       </div>
       <div style={{ 
@@ -38,7 +80,7 @@ const Footer = () => {
         fontSize: '0.9rem',
         opacity: 0.7
       }}>
-        <p>© 2024 Event App. Tous droits réservés.</p>
+        <p>© 2024 ACME. Tous droits réservés.</p>
       </div>
     </footer>
   );
