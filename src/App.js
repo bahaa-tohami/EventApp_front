@@ -21,6 +21,7 @@ import { useState } from 'react';
 import { UserConnected } from './auth/userConnected.js';
 import { useEffect } from 'react';
 import EdiformPage from "./pages/EdiformPage.js";
+import Footer from "./components/Footer.js";
 
 const socket = io('http://localhost:9000');
 
@@ -69,6 +70,7 @@ const App = () => {
           <Route path="/invitations" element={<InvitationPage />} />
           {/* Ajoutez d'autres routes ici */}
         </Routes>
+        <Footer />
       </Router>
     </AuthProvider>
 
