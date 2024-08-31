@@ -21,7 +21,11 @@ const InvitationCard = ({ invitation, onButtonClick }) => {
                         <p> {isReceiver ? 'Date reception: ' : 'Envoyé le: '}
                             {new Date(invitation.invited_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                             <span> à </span>  {new Date(invitation.invited_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
-                        <p>Organisateur: {invitation.User.first_name} {invitation.User.last_name}</p>
+                        {isReceiver ? (
+                            <p>Invité par: {invitation.Event.User.username}</p>
+                        ) : (
+                            <p>Invitation envoyée à:  {invitation.User.username}</p>
+                        )}
                     </div>
 
                 </CardBody>

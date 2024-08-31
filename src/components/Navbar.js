@@ -65,8 +65,8 @@ export default function App({handleOnClickOnNotification,countNotifications}) {
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link to="/notifications" color="foreground">
-                <Badge placement="top-right" onClick={handleOnClickOnNotification} color="danger" isInvisible={isInvisible} content={countNotifications}  shape="circle">
+              <Link onClick={handleOnClickOnNotification} to="/notifications" color="foreground">
+                <Badge placement="top-right" color="danger" isInvisible={isInvisible} content={countNotifications}  shape="circle">
                  Notifications
                 </Badge>
               </Link>
