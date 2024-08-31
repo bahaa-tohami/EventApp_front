@@ -21,7 +21,11 @@ import { useState } from 'react';
 import { UserConnected } from './auth/userConnected.js';
 import { useEffect } from 'react';
 import EdiformPage from "./pages/EdiformPage.js";
+
 import ActivationPage from "./pages/ActivationPage.js";
+
+import Footer from "./components/Footer.js";
+
 
 const socket = io('http://localhost:9000');
 
@@ -71,6 +75,7 @@ const App = () => {
           <Route path="/activation/:token?" element={<ActivationPage />} />
           {/* Ajoutez d'autres routes ici */}
         </Routes>
+        
       </Router>
     </AuthProvider>
 
