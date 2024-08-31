@@ -19,8 +19,8 @@ const TableEvent = ({events}) => {
           <TableColumn>Actions</TableColumn>
         </TableHeader>
         <TableBody>
-          {events.map((event) => (
-            <TableRow key={event.id} style={{backgroundColor: getRowBackgroundColor(event)}}>
+          {events.map((event, index) => (
+            <TableRow key={index} style={{backgroundColor: getRowBackgroundColor(event)}}>
               <TableCell>{event.title}</TableCell>
               <TableCell>{event.location}</TableCell>
               <TableCell>{new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</TableCell>
