@@ -61,7 +61,7 @@ export default function App({handleOnClickOnNotification,countNotifications}) {
             </NavbarItem>
             <NavbarItem>
               <Link to="/invitations" color="foreground">
-                Mes Invitations
+                Invitations
               </Link>
             </NavbarItem>
             <NavbarItem>

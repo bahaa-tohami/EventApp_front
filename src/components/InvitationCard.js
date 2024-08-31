@@ -18,7 +18,7 @@ const InvitationCard = ({ invitation, onButtonClick }) => {
                     <div>
                         <p>Description: {invitation.Event.description}</p>
                         <p>Lieu: {invitation.Event.location}</p>
-                        <p> {isReceiver ? 'Date reception: ' : 'Envoyé le: '} 
+                        <p> {isReceiver ? 'Date reception: ' : 'Envoyé le: '}
                             {new Date(invitation.invited_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                             <span> à </span>  {new Date(invitation.invited_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
                         <p>Organisateur: {invitation.User.first_name} {invitation.User.last_name}</p>
@@ -28,25 +28,25 @@ const InvitationCard = ({ invitation, onButtonClick }) => {
                 <CardFooter>
                     <div className="flex justify-between items-center w-full">
                         <Button onClick={() => navigate(`/eventdetails/${invitation.event_id}`)}>Voir l'événement</Button>
-                        {isReceiver ?  (
-                        <div className="flex gap-2 justify-end">
-                            {isResponded ? <Chip color="primary">{invitation.status}</Chip> :
-                                <> 
-                                    <Button
-                                        color="success"
-                                        onClick={() => onButtonClick(invitation, "accepted")}>
-                                        Accepter
-                                    </Button>
-                                    <Button
-                                        color="danger"
-                                        onClick={() => onButtonClick(invitation, "declined")}>
-                                        Refuser
-                                    </Button>
+                        {isReceiver ? (
+                            <div className="flex gap-2 justify-end">
+                                {isResponded ? <Chip color="primary">{invitation.status}</Chip> :
+                                    <>
+                                        <Button
+                                            color="success"
+                                            onClick={() => onButtonClick(invitation, "accepted")}>
+                                            Accepter
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            onClick={() => onButtonClick(invitation, "declined")}>
+                                            Refuser
+                                        </Button>
                                     </>
                                 }
                             </div>
-                        ): (
-                            <Chip color="primary">{invitation.status}</Chip> 
+                        ) : (
+                            <Chip color="primary">{invitation.status}</Chip>
                         )}
                     </div>
                 </CardFooter>
