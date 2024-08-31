@@ -9,6 +9,8 @@ import { Time } from "@internationalized/date";
 import InviteUserButton from '../components/InviteUserButton.js';
 import InviteUserForm from '../components/InviteUserForm.js';
 import { useAuth } from '../auth/AuthContext.js';
+import { useNavigate } from 'react-router-dom';
+import useDeleteRequest from '../hooks/deleteRequest.js';
 // Mock functions for fetching event and user data
 const fetchEventById = async (eventId) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -38,7 +40,7 @@ const fetchEventById = async (eventId) => {
 
 const EventDetails = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-
+    const navigate = useNavigate();
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
     const [participantCount, setParticipantCount] = useState(0);
@@ -53,6 +55,7 @@ const EventDetails = () => {
     const [hoverValue, setHoverValue] = useState(undefined);
     const [message, setMessage] = useState('');
     const [messageColor, setMessageColor] = useState('');
+    const {deleteData, errorDelete, loadingDelete} = useDeleteRequest(`http://localhost:9000/event/delete-event/${eventId}`);
 
 
     const { isOpen: isInvitesModalOpen, onOpen: onInvitesOpen, onClose: onInvitesClose } = useDisclosure();
@@ -64,6 +67,7 @@ const EventDetails = () => {
         setRating(0);
         onCommentOpen();
     }
+   
 
     
 
@@ -215,6 +219,16 @@ const EventDetails = () => {
                 <p style={{ marginLeft: 8 }}>{rating}</p>
             </div>
         );
+    };
+    const handleDeleteEvent = () => {
+        deleteData(event.event_id);
+        if(!errorDelete){
+            console.log('Event deleted');
+            navigate('/home');
+
+        }else {
+            console.log(errorDelete);
+        }
     };
 
     const handleMouseOverStar = value => {
@@ -423,8 +437,29 @@ const EventDetails = () => {
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
-
-
+                        <Divider />
+                        {currentUser && currentUser.userId === event.created_by && (
+                        <div className="flex justify-between items-end w-full">
+                            <div className="flex gap-2 justify-right">
+                                
+                                        <Button
+                                            color="primary"
+                                            size="sm"
+                                            onPress={() => navigate(`/edit-event/${event.event_id}`)}
+                                            >
+                                            Modifier l'evenement
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            size="sm"
+                                            onClick={handleDeleteEvent}
+                                           >
+                                           Supprimer l'evenement
+                                        </Button>
+                                   
+                    </div>
+                    </div>
+                    )}
                     </CardFooter>
 
                 </Card>
