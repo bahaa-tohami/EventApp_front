@@ -16,8 +16,11 @@ const Signup = () => {
 
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({});
+    const [showActionMessage, setShowActionMessage] = useState(false);
+    const [showActivationMessage, setShowActivationMessage] = useState(false);
     const [isVisible, setIsVisible] = useState(false); 
     const navigate = useNavigate();
+
     
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -75,6 +78,7 @@ const Signup = () => {
         try {
             const response = await axios.post('http://localhost:9000/users', dataToSend);
             setMessage(response.data.message);
+            navigate('/activation');
         } catch (error) {
             console.error('Erreur lors de l\'inscription:', error);
             setMessage('Erreur lors de l\'inscription');
@@ -88,7 +92,20 @@ const Signup = () => {
     // Il faut définir `sizes` pour éviter les erreurs
     const sizes = ["md"]; // Ajustez cette liste selon vos besoins
     return (
+        <div>
         <div className="flex justify-center items-center min-h-screen ">
+            {showActionMessage && (
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <Card>
+                        <CardHeader>
+                            <p className="text-2xl font-bold">Activation du compte</p>
+                        </CardHeader>
+                        <CardBody>
+                            <p>Vous avez reçu un lien d'activation par email. Connectez-vous pour activer votre compte.</p>
+                        </CardBody>
+                    </Card>
+                </div>
+            )}  
             <div className="w-full max-w-xs flex flex-col gap-6 ">
                 {sizes.map((size) => (
                     <div key={size} className="w-full flex flex-col gap-6">
@@ -187,6 +204,28 @@ const Signup = () => {
                     </div>
                 ))}
             </div>
+        </div>
+         {showActivationMessage && (
+            <div className="flex justify-center items-center min-h-screen mt-50">
+            <div className="w-full max-w-sm flex flex-col gap-6">
+                <Card className="pb-10">
+                    <CardHeader className="flex gap-3">
+                        <div>
+                            <h1 className="text-2xl font-bold">Activation compte</h1>
+                        </div>
+                    </CardHeader>
+                    <CardBody>
+                        <p>Nous avons envoyé un email d'activation. Veuillez vous connecter pour activer votre compte.</p>
+                    </CardBody>
+                    <CardFooter>
+                        <Button onClick={() => navigate('/')} color="success" className="mr-2 w-full btn-success" size="xs">Home</Button>
+                        <Button  onClick={() => navigate('/login')} color="secondary" className="w-full btn-secondary" size="xs">Connexion</Button>
+                    </CardFooter>
+                </Card>
+            
+            </div>
+        </div>
+        )}
         </div>
     );
 };
