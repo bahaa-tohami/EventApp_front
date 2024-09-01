@@ -150,6 +150,7 @@ const { putData, errorPut, loadingPut } = usePutData(`http://localhost:9000/even
 
     return (
         <div>
+            <br />
             <div className="flex justify-center items-center">
                 <div className="w-full max-w-3xl flex flex-col gap-2">
                     <Card>

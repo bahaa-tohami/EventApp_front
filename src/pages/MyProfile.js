@@ -122,86 +122,88 @@ const UserProfile = () => {
     // if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
-    return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="w-full max-w-xs flex flex-col gap-6">
-                <Card className="pb-10">
-                    <CardHeader className="flex gap-3">
-                        <div>
-                            <h1 className="text-2xl font-bold">Profil utilisateur</h1>
-                        </div>
-                    </CardHeader>
-                    <CardBody>
-                        {user ? (
-                            <form onSubmit={handleValidation} className="flex flex-col gap-4">
-                                <Input
-                                    type="text"
-                                    name="username"
-                                    label="Nom d'utilisateur"
-                                    defaultValue={user.username}
-                                    onChange={handleChange}
-                                    className="max-w-xs"
-                                />
-                                <Input
-                                    type="email"
-                                    name="email"
-                                    label="Email"
-                                    defaultValue={user.email}
-                                    onChange={handleChange}
-                                    className="max-w-xs"
-                                />
-                                {errors.email && (
-                                                <p className="text-red-500 text-sm">{errors.email}</p>
-                                            )}
-                                <Input
-                                    type="text"
-                                    name="first_name"
-                                    label="Prénom"
-                                    defaultValue={user.first_name}
-                                    onChange={handleChange}
-                                    className="max-w-xs"
-                                />
-                                <Input
-                                    type="text"
-                                    name="last_name"
-                                    label="Nom"
-                                    defaultValue={user.last_name}
-                                    onChange={handleChange}
-                                    className="max-w-xs"
-                                />
-                                <Input
-                                    type="text"
-                                    name="role"
-                                    label="Rôle"
-                                    defaultValue={user.role}
-                                    readOnly
-                                    className="max-w-xs"
-                                />
-                                <Input
-                                    type="text"
-                                    name="status"
-                                    label="Statut"
-                                    defaultValue={user.status}
-                                    readOnly
-                                    className="max-w-xs"
-                                />
-                                {modified && (
-                                    <div className="flex justify-center">
-                                        <Button color="primary" type="submit" className="mt-4">
-                                            Valider
-                                        </Button>
-                                    </div>
-                                )}
-                                {message && <p>{message}</p>} {/* Afficher le message de retour */}
-                            </form>
-                        ) : (
-                            <p className="text-center"></p>
-                        )}
-                    </CardBody>
-                </Card>
-            </div>
+   return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 mt-16">
+        <div className="w-full max-w-2xl flex flex-col gap-6">
+            <br />
+        
+            <Card className="pb-10 shadow-lg">
+                <CardHeader className="flex gap-3">
+                    <div>
+                        <h1 className="text-2xl font-bold">Profil utilisateur</h1>
+                    </div>
+                </CardHeader>
+                <CardBody>
+                    {user ? (
+                        <form onSubmit={handleValidation} className="flex flex-col gap-4">
+                            <Input
+                                type="text"
+                                name="username"
+                                label="Nom d'utilisateur"
+                                defaultValue={user.username}
+                                onChange={handleChange}
+                                className="max-w-full"
+                            />
+                            <Input
+                                type="email"
+                                name="email"
+                                label="Email"
+                                defaultValue={user.email}
+                                onChange={handleChange}
+                                className="max-w-full"
+                            />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm">{errors.email}</p>
+                            )}
+                            <Input
+                                type="text"
+                                name="first_name"
+                                label="Prénom"
+                                defaultValue={user.first_name}
+                                onChange={handleChange}
+                                className="max-w-full"
+                            />
+                            <Input
+                                type="text"
+                                name="last_name"
+                                label="Nom"
+                                defaultValue={user.last_name}
+                                onChange={handleChange}
+                                className="max-w-full"
+                            />
+                            <Input
+                                type="text"
+                                name="role"
+                                label="Rôle"
+                                defaultValue={user.role}
+                                readOnly
+                                className="max-w-full"
+                            />
+                            <Input
+                                type="text"
+                                name="status"
+                                label="Statut"
+                                defaultValue={user.status}
+                                readOnly
+                                className="max-w-full"
+                            />
+                            {modified && (
+                                <div className="flex justify-center">
+                                    <Button color="primary" type="submit" className="mt-4">
+                                        Valider
+                                    </Button>
+                                </div>
+                            )}
+                            {message && <p>{message}</p>} {/* Afficher le message de retour */}
+                        </form>
+                    ) : (
+                        <p className="text-center"></p>
+                    )}
+                </CardBody>
+            </Card>
         </div>
-    );
+    </div>
+);
     
 };
 

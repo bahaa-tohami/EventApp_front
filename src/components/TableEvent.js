@@ -5,7 +5,7 @@ const TableEvent = ({events}) => {
     const getRowBackgroundColor = (event) => {
         const userConnected = JSON.parse(localStorage.getItem('user'));
         if (event.created_by == userConnected.userId) {
-            return '#00aa9b';  // Couleur de fond rouge clair pour les événements importants
+            return 'grey';  // Couleur de fond rouge clair pour les événements importants
         } 
         return ''; // Aucune couleur de fond par défaut
     };
@@ -21,11 +21,11 @@ const TableEvent = ({events}) => {
         <TableBody>
           {events.map((event, index) => (
             <TableRow key={index} style={{backgroundColor: getRowBackgroundColor(event)}}>
-              <TableCell>{event.title}</TableCell>
+              <TableCell className="text-xl">{event.title}</TableCell>
               <TableCell>{event.location}</TableCell>
               <TableCell>{new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</TableCell>
               <TableCell>
-                <Button color="primary" variant="light" onPress={() => navigate(`/eventdetails/${event.event_id}`)}>
+                <Button color="foreground" onPress={() => navigate(`/eventdetails/${event.event_id}`)}>
                   Voir
                 </Button>
               </TableCell>

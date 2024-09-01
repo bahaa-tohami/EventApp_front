@@ -7,7 +7,7 @@ const AdminPage = () => {
     const [activeTab, setActiveTab] = useState('users');
 
     const linkStyle = (isActive) => ({
-        color: isActive ? 'blue' : 'inherit',
+        color: isActive ? 'grey' : 'inherit',
         fontWeight: isActive ? 'bold' : 'normal',
     });
 

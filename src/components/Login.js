@@ -4,6 +4,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import { MailIcon } from './MailIcon.jsx';
 import { LockIcon } from './LockIcon.jsx';
 import { useAuth } from '../auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +13,7 @@ const Login = () => {
   const { setIsAuthenticated } = useAuth();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [backdrop, setBackdrop] = useState('blur');
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setBackdrop('blur');
@@ -41,7 +43,7 @@ const Login = () => {
       if (res.data.token) {
         localStorage.setItem("user", JSON.stringify(res.data));
         setIsAuthenticated(true);
-        window.location = "/home";
+        navigate('/home');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -51,22 +53,22 @@ const Login = () => {
 
   return (
     <>
-      <Button variant="flat" color="primary" onPress={handleOpen}>
-        Se connecter
+      <Button variant="flat" color="default" onPress={handleOpen}>
+        Connexion
       </Button>
       <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (
             <form method="post" onSubmit={handleSubmit} className="login-form p-3">
-              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Connexion</ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
                   endContent={
                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
-                  label="Email"
-                  placeholder="Enter your email"
+                  label="Nom d'utilisateur"
+                  placeholder="Entrez votre nom d'utilisateur"
                   variant="bordered"
                   name="username"
                   onChange={handleChange}
@@ -76,34 +78,23 @@ const Login = () => {
                   endContent={
                     <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
-                  label="Password"
-                  placeholder="Enter your password"
+                  label="Mot de passe"
+                  placeholder="Entrez votre mot de passe"
                   type="password"
                   variant="bordered"
                   name="password"
                   onChange={handleChange}
                   value={password}
                 />
-                <div className="flex py-2 px-1 justify-between">
-                  <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
-                </div>
+                
                 {error && <p className="error">{error}</p>}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
+                  Fermer
                 </Button>
                 <Button color="primary" type="submit">
-                  Sign in
+                  Se connecter
                 </Button>
               </ModalFooter>
             </form>
