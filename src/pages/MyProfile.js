@@ -197,7 +197,7 @@ const UserProfile = () => {
                             {message && <p>{message}</p>} {/* Afficher le message de retour */}
                         </form>
                     ) : (
-                        <p className="text-center">Chargement...</p>
+                        <p className="text-center"></p>
                     )}
                 </CardBody>
             </Card>

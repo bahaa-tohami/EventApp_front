@@ -41,7 +41,7 @@ export default function App({handleOnClickOnNotification,countNotifications}) {
         <>
           <NavbarBrand>
             <AcmeLogo />
-            <p className="font-bold text-inherit">ACME</p>
+            <p className="font-bold text-inherit">Event<strong>App</strong></p>
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
@@ -93,7 +93,7 @@ export default function App({handleOnClickOnNotification,countNotifications}) {
             </NavbarItem>
             <NavbarItem>
               <Button variant="flat">
-                <Link to="/registration" color="foreground" >Sign Up</Link>
+                <Link to="/registration" color="foreground" >Inscription</Link>
               </Button>
             </NavbarItem>
           </NavbarContent>

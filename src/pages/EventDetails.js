@@ -194,7 +194,7 @@ const EventDetails = () => {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {stars}
-                    <p style={{ marginLeft: '8px', fontSize: '16px', fontWeight: 'bold' }}>{starAverage}</p>
+                    <p style={{ marginLeft: '10px', fontSize: '16px', fontWeight: 'bold' }}>{starAverage}</p>
                 </div>
             </div>
         );
@@ -214,6 +214,7 @@ const EventDetails = () => {
                         key={index}
                         size={12}
                         color={rating > index ? colors.orange : colors.grey}
+                        
                     />
                 ))}
                 <p style={{ marginLeft: 8 }}>{rating}</p>
@@ -301,13 +302,21 @@ const EventDetails = () => {
                     <Divider />
                     <CardBody>
 
-                        <p className="text-sm text-default-500"><strong>Titre:</strong> {event.title}</p>
-                        <p className="text-sm text-default-500"><strong>Description:</strong> {event.description}</p>
+                        <p className="text-xl">{event.description}</p>
                         <p className="text-sm text-default-500">
-                            <strong>Date:</strong> {new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            Le {new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
 
                         </p>
-                        <p className="text-sm text-default-500"><strong>Lieu:</strong> {event.location}</p>
+                        <br />
+                        
+                        <p className="text-sm text-default-500">Capacité maximale de {event.capacity} personnes</p>
+                        <p className="text-sm text-default-500">Nombre d'inscrits est de {participantCount}</p>
+                        <div className='flex gap-4 items-center '>
+                               <p className="text-sm text-default-500">Note</p>
+                        <div><RatingDisplay comments={event.Comments} /></div>
+                        </div>
+                     
+
                         <br />
                         <TimeInput
                             isReadOnly
@@ -315,12 +324,8 @@ const EventDetails = () => {
                             defaultValue={eventTime}
                         />
                         <br />
-                        {/* <p>Organisé par {capitalizeFirstLetter(user.username)}</p>  */}{/* Make sure the field is correct */}
-                        <p style={{ paddingBottom: '20px' }} ><strong>Capacité maximale: </strong> {event.capacity} personnes</p>
-                        <div className='flex gap-4 items-center '>
-                            <p><strong>Note moyenne:</strong></p>
-                            <div><RatingDisplay comments={event.Comments} /></div>
-                        </div>
+                        {/* <p>Organisé par {capitalizeFirstLetter(user.username)}</p>  */}
+                        
 
                         <div>
                             {currentUser && currentUser.userId === event.created_by && (
@@ -328,7 +333,6 @@ const EventDetails = () => {
 
                                 <div className="flex gap-4 items-center ">
 
-                                    <p><strong>Nombre d'inscrits: </strong>{participantCount}</p>
                                     <div>
                                         <Button onPress={onInvitesOpen}>Afficher la liste</Button>
                                         <Modal isOpen={isInvitesModalOpen} onOpenChange={onInvitesClose}>
@@ -340,7 +344,9 @@ const EventDetails = () => {
                                                             {event.Participants && event.Participants.length > 0 ? (
                                                                 <ul>
                                                                     {event.Participants.map((participant) => (
-                                                                        <li key={participant.user_id} className="border p-2 mb-2 rounded flex items-center gap-3">
+                                                                        <li key={participant.user_id} className="mb-2 bg-default rounded flex items-center gap-3">
+                                                                        
+                                                                            <CardHeader className="flex items-center gap-3">
                                                                             <Image
                                                                                 alt="user avatar"
                                                                                 height={40}
@@ -350,9 +356,12 @@ const EventDetails = () => {
                                                                             />
                                                                             <div className="flex flex-col">
                                                                                 <p className="text-md">
+                                                                            
                                                                                     {participant.User.username || 'Utilisateur inconnu'}
                                                                                 </p>
                                                                             </div>
+                                                                            </CardHeader>
+                                                                            
                                                                         </li>
                                                                     ))}
                                                                 </ul>
@@ -362,7 +371,7 @@ const EventDetails = () => {
                                                         </ModalBody>
                                                         <ModalFooter>
                                                             <Button color="danger" variant="light" onPress={onClose}>
-                                                                Close
+                                                                Fermer
                                                             </Button>
                                                         </ModalFooter>
                                                     </>
@@ -383,25 +392,21 @@ const EventDetails = () => {
                     </CardBody>
                     <Divider />
                     <CardFooter className="flex flex-col gap-4">
+                                <h2 className="text-lg font-semibold">Commentaires</h2>
 
                         <div className="flex gap-4 items-center">
                             <div className="max-w-lg mx-auto p-4">
-                                <h2 className="text-lg font-semibold mb-4">Commentaires</h2>
                                 {event.Comments.length > 0 ? (
                                     <ul className="list-none p-0">
                                         {event.Comments.map((comment) => (
-                                            <li key={comment.id} className=" p-4 mb-2 rounded flex items-start">
-                                                <Avatar
-                                                    src={comment.avatar}
-                                                    alt="Avatar"
-                                                    className="flex-shrink-0 mr-4"
-                                                    size="sm"
-                                                />
-                                                <div className="flex-1">
-                                                    <p className="font-medium mb-1">{comment.content || 'Pas de contenu'}</p>
-                                                    <p><RatingOneComment rating={comment.rating} /></p>
-
-                                                </div>
+                                            <li key={comment.id} className="mb-2">
+                                                <Card className="p-4 rounded flex items-start">
+                                                    
+                                                    <div className="flex-1">
+                                                        <p className="mb-1">{comment.content || 'Pas de contenu'}</p>
+                                                        <p><RatingOneComment rating={comment.rating} /></p>
+                                                    </div>
+                                                </Card>
                                             </li>
                                         ))}
                                     </ul>

@@ -10,7 +10,7 @@ const InvitationCard = ({ invitation, onButtonClick }) => {
     const navigate = useNavigate();
     return (
         <div>
-            <Card className={`${isReceiver ? 'bg-gray' : ''}`}>
+            <Card className={`${isReceiver ? 'default' : ''}`}>
                 <CardHeader className="flex gap-3">
                   <Image
                     alt="event image"
@@ -28,7 +28,7 @@ const InvitationCard = ({ invitation, onButtonClick }) => {
                 <CardBody>
                     <div>
                         <p className="text-default-500">{invitation.Event.description}</p>
-                        <p className="text-default-500"> {isReceiver ? 'Date reception: ' : 'Envoyé le: '}
+                        <p className="text-default-500"> {isReceiver ? 'Reçu le ' : 'Envoyée le  '}
                             {new Date(invitation.invited_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                             <span> à </span>  {new Date(invitation.invited_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
                         {isReceiver ? (

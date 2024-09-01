@@ -61,7 +61,7 @@ const Events = () => {
                                 {isTabFormat ? 'Voir sous forme liste' : 'Voir sous forme calendrier'}
                             </Button>
                             <Button
-                                color='secondary'
+                                color='default'
                                 size='sm'
                                 onClick={() => navigate('/event-form')}
                                 className="text-white px-4 py-2 rounded"
